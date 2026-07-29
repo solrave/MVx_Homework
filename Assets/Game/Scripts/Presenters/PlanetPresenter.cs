@@ -43,7 +43,6 @@ namespace Game.Presenters
             _planetView.OnPlanetClicked += this.PlanetClicked;
             _planet.OnUnlocked += this.PlanetUnlocked;
             _planet.OnIncomeTimeChanged += this.IncomeTimeChanged;
-            _planet.OnIncomeTimeChanged += this.SetProgressText;
             _planet.OnGathered += this.IncomeGathered;
         }
 
@@ -55,16 +54,24 @@ namespace Game.Presenters
             _planetView.OnPlanetClicked -= this.PlanetClicked;
             _planet.OnUnlocked -= this.PlanetUnlocked;
             _planet.OnIncomeTimeChanged -= this.IncomeTimeChanged;
-            _planet.OnIncomeTimeChanged -= this.SetProgressText;
             _planet.OnGathered -= this.IncomeGathered;
         }
         
-        private void IncomeGathered(int count) => this.OnIncomeGathered?.Invoke(Name, count);
-
-        private void IncomeTimeChanged(float time) => _planetView.SetProgressFill(_planet.IncomeProgress);
-
-        private void SetProgressText(float text) => _planetView.SetProgressText($"{((text)):0}");
-
+        private void IncomeTimeChanged(float time)
+        {
+            _planetView.HideCoin();
+            _planetView.ShowProgressBar();
+            _planetView.SetProgressFill(_planet.IncomeProgress);
+            _planetView.SetProgressText($"{time:0}");
+        }
+        
+        private void IncomeGathered(int count)
+        {
+            this.OnIncomeGathered?.Invoke(Name, count);
+            _planetView.HideCoin();
+            _planetView.ShowProgressBar();
+        }
+        
         private void IncomeReady(bool obj)
         {
             _planetView.HideProgressBar();
