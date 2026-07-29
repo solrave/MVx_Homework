@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97767c5481534cf38a418646e4d81b15, type: 3}
   m_Name: GameplayInstaller
   m_EditorClassIdentifier: 
-  _initialMoney: 100000
+  _initialMoney: 300
   _catalog: {fileID: 11400000, guid: 24135235a5c00425d9bcca105b41c4c4, type: 2}

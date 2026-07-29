@@ -15,10 +15,7 @@ namespace Modules.Planets
         [SerializeField]
         private PlanetConfig[] _planets;
 
-        public PlanetConfig this[int index]
-        {
-            get { return _planets[index]; }
-        }
+        public PlanetConfig this[int index] => _planets[index];
 
         public IEnumerator<PlanetConfig> GetEnumerator()
         {

@@ -1,3 +1,6 @@
+//using Game.Gameplay;
+
+using Game.Views;
 using UnityEngine;
 using Zenject;
 
@@ -12,6 +15,27 @@ namespace Game.Presenters
         public override void InstallBindings()
         {
             //TODO:
+            this.Container.Bind<PlanetPresenter>()
+                .FromComponentsInHierarchy()
+                .AsCached();
+
+            this.Container.Bind<PlanetPopupPresenter>()
+                .FromComponentInHierarchy()
+                .AsSingle();
+            
+            this.Container.BindInterfacesAndSelfTo<PlanetManager>()
+                .AsSingle()
+                .NonLazy();
+            
+            this.Container.BindInterfacesAndSelfTo<MoneyView>()
+                .FromComponentInHierarchy()
+                .AsSingle()
+                .NonLazy();
+            
+            this.Container.BindInterfacesAndSelfTo<MoneyPresenter>()
+                .FromComponentInHierarchy()
+                .AsSingle()
+                .NonLazy();
         }
     }
 }

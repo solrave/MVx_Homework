@@ -60,7 +60,7 @@ namespace Modules.Planets
 
         [Title("Income")]
         [ShowInInspector, ReadOnly, ProgressBar(0, 1)]
-        public float IncomeProgress => 1 - _countdown.RemainingTime / _countdown.Duration;
+        public float IncomeProgress => _countdown.RemainingTime / _countdown.Duration;
 
         [ShowInInspector, ReadOnly]
         public bool IsIncomeReady { get; private set; }
