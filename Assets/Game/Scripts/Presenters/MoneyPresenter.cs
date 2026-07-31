@@ -36,7 +36,7 @@ namespace Game.Presenters
 
         private void MoneySpent(int newValue, int range)
         {
-           
+           //Money Animation
         }
 
         private void MoneyChanged(int newValue, int prevValue)

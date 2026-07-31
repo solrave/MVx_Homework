@@ -1,5 +1,6 @@
 using System;
 using Game.Views;
+using Modules.Money;
 using Modules.Planets;
 using UnityEngine;
 using Zenject;
@@ -13,14 +14,9 @@ namespace Game.Presenters
         
         private IPlanet _planet;
 
-        private void OnEnable()
+        private void Update()
         {
-            
-        }
-
-        private void OnDisable()
-        {
-            
+            UpdateUpgradeButton();
         }
 
         public void Show(IPlanet planet)
@@ -57,14 +53,24 @@ namespace Game.Presenters
             _planetPopupView.SetUpgradeAllowed(_planet.CanUpgrade);
         }
 
-        private void PopulationChanged(int num) => _planetPopupView.SetPopulation(num.ToString());
+        private void PopulationChanged(int num) => _planetPopupView.SetPopulation($"{num.ToString()}");
 
         private void IncomeChanged(int income) => _planetPopupView.SetIncome($"{income.ToString()} / sec");
 
-        private void Upgraded(int level) => _planetPopupView.SetLevel(level.ToString());
+        private void Upgraded(int level) => _planetPopupView.SetLevel($"{_planet.Level} / {_planet.MaxLevel}");
 
         private void CloseClicked() => this.Hide();
 
-        private void UpgradeClicked() => _planet.Upgrade();
+        private void UpgradeClicked()
+        {
+            _planet.Upgrade();
+            UpdateUpgradeButton();
+        }
+
+        private void UpdateUpgradeButton()
+        {
+            _planetPopupView.SetUpgradeAllowed(_planet.CanUpgrade);
+            _planetPopupView.SetPrice($"{_planet.Price}");
+        }
     }
 }

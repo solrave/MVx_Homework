@@ -37,13 +37,6 @@ public class PlanetView : MonoBehaviour
     public void SetPrice(string text) => this._price.SetText(text);
     public void SetIcon(Sprite icon) => this._planetIcon.sprite = icon;
     public void HideLock() => _planetLock.gameObject.SetActive(false);
-    public void HideProgressBar()
-    {
-        _incomeGroup.alpha = 0;
-    }
-
-    public void ShowProgressBar()
-    {
-        _incomeGroup.alpha = 1;
-    }
+    public void HideProgressBar() => _incomeGroup.alpha = 0;
+    public void ShowProgressBar() => _incomeGroup.alpha = 1;
 }

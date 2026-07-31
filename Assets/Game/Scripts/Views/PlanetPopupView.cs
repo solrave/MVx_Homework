@@ -29,11 +29,11 @@ namespace Game.Views
         [SerializeField] private Button _closeButton;
         
         public void SetAvatar(Sprite icon) => _avatar.sprite = icon;
-        public void SetName(string name) => _name.text = name;
-        public void SetPopulation(string name) => _population.text = $"Population: {name}";
-        public void SetLevel(string name) => _level.text = $"Level: {name}";
-        public void SetIncome(string name) => _income.text = $"Income: {name}";
-        public void SetPrice(string name) => _price.text = $"Price: {name}";
+        public void SetName(string planetName) => _name.text = planetName;
+        public void SetPopulation(string populationCount) => _population.text = $"Population: {populationCount}";
+        public void SetLevel(string level) => _level.text = $"Level: {level}";
+        public void SetIncome(string income) => _income.text = $"Income: {income}";
+        public void SetPrice(string price) => _price.text = $"Price: {price}";
         public void SetUpgradeAllowed(bool allowed) => _upgradeButton.interactable = allowed;
     }
 }

@@ -500,8 +500,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Views::PlanetView
   _coin: {fileID: 648301223005266422}
+  _incomeGroup: {fileID: 7304924201504151740}
   _progressTime: {fileID: 8019802931863089282}
-  _incomeRoot: {fileID: 5072925286837728165}
   _progressBar: {fileID: 6948507870913343312}
   _price: {fileID: 5444377921757551026}
   _planetIcon: {fileID: 606508972301849034}
@@ -532,6 +532,7 @@ GameObject:
   - component: {fileID: 1921716995094703198}
   - component: {fileID: 7366688001666472230}
   - component: {fileID: 5072925286837728165}
+  - component: {fileID: 7304924201504151740}
   m_Layer: 5
   m_Name: Income
   m_TagString: Untagged
@@ -598,6 +599,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.2
+--- !u!225 &7304924201504151740
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5564512366540979095}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6740194235726008877
 GameObject:
   m_ObjectHideFlags: 0

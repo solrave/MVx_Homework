@@ -8,9 +8,9 @@ namespace Game.Presenters
 {
     public class PlanetManager : IDisposable 
     {
-        private Dictionary<string, Planet> _planets = new();
-        private Dictionary<string, PlanetPresenter> _planetPresenters;
-        private ParticleAnimator _coinAnimator;
+        private readonly Dictionary<string, Planet> _planets = new();
+        private readonly Dictionary<string, PlanetPresenter> _planetPresenters;
+        private readonly ParticleAnimator _coinAnimator;
         private readonly MoneyPresenter _moneyPresenter;
 
         public PlanetManager(List<Planet> planets,
