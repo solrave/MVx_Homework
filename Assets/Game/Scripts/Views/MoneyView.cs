@@ -9,7 +9,7 @@ namespace Game.Views
 {
     public class MoneyView : MonoBehaviour
     {
-        public Vector2 IncomeCoinPosition => this._coinIcon.gameObject.transform.position;
+        public Vector2 IncomeCoinPosition => this._coinIcon.rectTransform.position;
         
         [SerializeField]
         private TMP_Text _currentMoneyText;
@@ -25,17 +25,17 @@ namespace Game.Views
             _presenter = presenter;
         }
 
-        private void Awake()
+        private void OnEnable()
         {
             UpdateView(_presenter.Money);
             _presenter.OnUpdateView += UpdateView;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             _presenter.OnUpdateView -= UpdateView;
         }
-        
-        public void UpdateView(string value) => _currentMoneyText.text = value;
+
+        private void UpdateView(string value) => _currentMoneyText.text = value;
     }
 }

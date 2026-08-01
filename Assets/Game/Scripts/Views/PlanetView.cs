@@ -10,19 +10,7 @@ using Game.Views;
 
 public class PlanetView : MonoBehaviour
 {
-    public event Action OnPlanetClicked
-    {
-        add => _button.OnClick += value;
-        remove => _button.OnClick -= value;
-    }
-    
-    public event Action OnPlanetHold
-    {
-        add => _button.OnHold += value;
-        remove => _button.OnHold -= value;
-    }
-
-    [SerializeField] public string Name;
+   [SerializeField] public string Name;
     
     [SerializeField] private Image _coin;
     [SerializeField] private CanvasGroup _progressGroup;
@@ -43,8 +31,9 @@ public class PlanetView : MonoBehaviour
     {
         _coinAnimator = coinAnimator;
         _moneyViewCoinPosition = moneyView.IncomeCoinPosition;
+        Debug.Log($"COIN POSITION: {_moneyViewCoinPosition}");
     }
-    
+
     public void Initialize(PlanetPresenter presenter)
     {
         _presenter = presenter;
@@ -52,8 +41,8 @@ public class PlanetView : MonoBehaviour
         HideProgressBar();
         SetPrice(_presenter.Price);
         SetIcon(_presenter.Icon);
-        this.OnPlanetHold += _presenter.PlanetHold;
-        this.OnPlanetClicked += _presenter.PlanetClicked;
+        _button.OnHold += _presenter.PlanetHold;
+        _button.OnClick += _presenter.PlanetClicked;
         _presenter.OnIncomeGathered += this.AnimateIncomeGathering;
         _presenter.OnUnlocked += this.PlanetUnlocked;
         _presenter.OnIncomeReady += IncomeReady;
@@ -62,7 +51,7 @@ public class PlanetView : MonoBehaviour
 
     private void AnimateIncomeGathering()
     {
-        _coinAnimator.Emit(_coin.transform.position,
+        _coinAnimator.Emit(_coin.rectTransform.position,
             _moneyViewCoinPosition);
     }
 
@@ -90,7 +79,7 @@ public class PlanetView : MonoBehaviour
     
     private void IncomeTimeChanged(float incomeProgress, float remainingTime)
     {
-        if (_presenter.IsIncomeReady && _presenter.IsIncomeReady)
+        if (_presenter.IsIncomeReady)
         {
             ShowCoin();
             HideProgressBar();
@@ -113,5 +102,7 @@ public class PlanetView : MonoBehaviour
         SetIcon(icon);
         HideLock();
         HidePrice();
+        ShowProgressBar();
+        ShowCoin();
     }
 }

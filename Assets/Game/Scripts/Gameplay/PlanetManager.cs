@@ -27,15 +27,14 @@ namespace Game.Presenters
             foreach (var planet in planets)
             {
                 var presenter = _instantiator.Instantiate<PlanetPresenter>(new object[] { planet });
+                presenter.Initialize();
                 _planetPresenters.Add(planet.Name, presenter);
             }
-            UnityEngine.Debug.Log($"[МЕНЕДЖЕР] Всего вьюшек в словаре: {_planetViews.Count}");
 
             foreach (var (name, view) in _planetViews)
             {
-                UnityEngine.Debug.Log($"[МЕНЕДЖЕР] Инициализирую вьюху для планеты: {name}");
                 if (!_planetPresenters.TryGetValue(name, out PlanetPresenter presenter))
-                    throw new System.Exception("Planet not found: " + name);
+                    throw new Exception("Planet not found: " + name);
 
                 view.Initialize(presenter);
             }

@@ -19,12 +19,10 @@ namespace Game.Presenters
         
         private PlanetPopupPresenter _planetPopup;
         private IPlanet _planet;
-        private MoneyPresenter _moneyPresenter;
         
-        public PlanetPresenter(Planet planet, PlanetPopupPresenter planetPopup, MoneyPresenter moneyPresenter)
+        public PlanetPresenter(Planet planet, PlanetPopupPresenter planetPopup)
         {
             _planetPopup = planetPopup;
-            _moneyPresenter = moneyPresenter;
             _planet = planet;
         }
         
@@ -60,7 +58,10 @@ namespace Game.Presenters
         public void PlanetHold()
         {
             if (_planet.IsUnlocked)
+            {
+                Debug.Log("Planet hold");
                 _planetPopup.Show(_planet);
+            }
         }
         
         private void IncomeTimeChanged(float time)

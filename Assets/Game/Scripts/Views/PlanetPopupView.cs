@@ -10,18 +10,6 @@ namespace Game.Views
 {
     public class PlanetPopupView : MonoBehaviour
     {
-        public event UnityAction OnUpgradeClicked
-        {
-            add => _upgradeButton.onClick.AddListener(value);
-            remove => _upgradeButton.onClick.RemoveListener(value);
-        }
-        
-        public event UnityAction OnCloseClicked
-        {
-            add => _closeButton.onClick.AddListener(value);
-            remove => _closeButton.onClick.RemoveListener(value);
-        }
-        
         [SerializeField] private Image _avatar;
         [SerializeField] private TMP_Text _name;
         [SerializeField] private TMP_Text _population;
@@ -32,31 +20,40 @@ namespace Game.Views
         [SerializeField] private Button _closeButton;
         
         private PlanetPopupPresenter _presenter;
-       
-
+        
         [Inject]
         public void Construct(PlanetPopupPresenter presenter)
         {
             _presenter = presenter;
+            Subscribe();
         }
 
         private void Awake()
         {
-            this.OnUpgradeClicked += _presenter.UpgradeClicked;
-            this.OnCloseClicked += _presenter.CloseClicked;
+            UpdateView();
+        }
+
+        private void OnDestroy()
+        {
+            Unsubscribe();
+        }
+        
+        private void Subscribe()
+        {
+            _closeButton.onClick.AddListener(_presenter.CloseClicked);
+            _upgradeButton.onClick.AddListener(_presenter.UpgradeClicked);
             _presenter.OnUpdateView += this.UpdateView;
             _presenter.OnUpdateUpgradeButton += this.UpdateUpgradeButton;
             _presenter.OnCloseClicked += this.Hide;
             _presenter.OnUpgraded += this.SetLevel;
             _presenter.OnPopulationChanged += this.SetPopulation;
             _presenter.OnIncomeChanged += this.SetIncome;
-            UpdateView();
         }
 
-        private void OnDestroy()
+        private void Unsubscribe()
         {
-            this.OnUpgradeClicked -= _presenter.UpgradeClicked;
-            this.OnCloseClicked -= _presenter.CloseClicked;
+            _closeButton.onClick.RemoveListener(_presenter.CloseClicked);
+            _upgradeButton.onClick.RemoveListener(_presenter.UpgradeClicked);
             _presenter.OnUpdateView -= this.UpdateView;
             _presenter.OnUpdateUpgradeButton -= this.UpdateUpgradeButton;
             _presenter.OnCloseClicked -= this.Hide;
@@ -64,9 +61,10 @@ namespace Game.Views
             _presenter.OnPopulationChanged -= this.SetPopulation;
             _presenter.OnIncomeChanged -= this.SetIncome;
         }
-        
+
         private void UpdateView()
         {
+            Show();
             SetAvatar(_presenter.Icon);
             SetName(_presenter.Name);
             SetPopulation(_presenter.Population.ToString());
@@ -74,7 +72,6 @@ namespace Game.Views
             SetIncome($"{_presenter.MinuteIncome} / sec");
             SetPrice($"{_presenter.Price}");
             SetUpgradeAllowed(_presenter.CanUpgrade);
-            this.gameObject.SetActive(true);
         }
         
         private void UpdateUpgradeButton()
@@ -84,6 +81,7 @@ namespace Game.Views
         }
         
         private void Hide() => this.gameObject.SetActive(false);
+        private void Show() => this.gameObject.SetActive(true);
         private void SetAvatar(Sprite icon) => _avatar.sprite = icon;
         private void SetName(string planetName) => _name.text = planetName;
         private void SetPopulation(string populationCount) => _population.text = $"Population: {populationCount}";

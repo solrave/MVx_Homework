@@ -21,7 +21,6 @@ namespace Game.Presenters
         public int MaxLevel => _planet.MaxLevel;
         public int MinuteIncome => _planet.MinuteIncome;
         public string Price => _planet.Price.ToString();
-        public bool IsUnlocked => _planet.IsUnlocked;
         public bool CanUpgrade => _planet.CanUnlockOrUpgrade;
         
         private IPlanet _planet;
@@ -72,6 +71,6 @@ namespace Game.Presenters
 
         private void IncomeChanged(int income) => this.OnIncomeChanged?.Invoke(income.ToString());
 
-        private void Upgraded(int level) => this.OnUpgraded?.Invoke($"{level / _planet.MaxLevel}");
+        private void Upgraded(int level) => this.OnUpgraded?.Invoke($"{level} / {_planet.MaxLevel}");
     }
 }

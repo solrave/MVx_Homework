@@ -13,8 +13,8 @@ namespace Game.Presenters
         {
             //TODO:
 
-            this.Container.BindInterfacesAndSelfTo<PlanetPopupPresenter>()
-                .AsSingle();
+            this.Container.Bind<PlanetPopupPresenter>()
+                .AsSingle().NonLazy();
             
             this.Container.BindInterfacesAndSelfTo<MoneyPresenter>()
                 .AsSingle();

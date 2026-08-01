@@ -11,7 +11,7 @@ namespace Game.Views
             //TODO:
             
             this.Container.BindInterfacesAndSelfTo<PlanetView>()
-                .FromComponentsInHierarchy()
+                .FromComponentsInHierarchy(includeInactive: true)
                 .AsCached();
             
             this.Container.BindInterfacesAndSelfTo<PlanetPopupView>()
