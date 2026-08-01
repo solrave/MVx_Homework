@@ -1,3 +1,4 @@
+using Game.Presenters;
 using Modules.Planets;
 using UnityEngine;
 using Zenject;
@@ -21,6 +22,10 @@ namespace Game.Gameplay
         {
             MoneyInstaller.Install(this.Container, _initialMoney);
             PlanetInstaller.Install(this.Container, _catalog);
+            
+            this.Container.BindInterfacesAndSelfTo<PlanetManager>()
+                .AsSingle()
+                .NonLazy();
         }
     }
 }

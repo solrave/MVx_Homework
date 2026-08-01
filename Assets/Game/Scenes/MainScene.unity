@@ -215,6 +215,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1278377349999856308, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
+      propertyPath: Name
+      value: Planet #2
+      objectReference: {fileID: 0}
     - target: {fileID: 2977064503454360078, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -393,6 +397,10 @@ PrefabInstance:
     - target: {fileID: 1226517422905731925, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278377349999856308, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
+      propertyPath: Name
+      value: Planet #9
       objectReference: {fileID: 0}
     - target: {fileID: 1921716995094703198, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -579,6 +587,10 @@ PrefabInstance:
     - target: {fileID: 1226517422905731925, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278377349999856308, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
+      propertyPath: Name
+      value: Planet #4
       objectReference: {fileID: 0}
     - target: {fileID: 2977064503454360078, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1015,6 +1027,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1278377349999856308, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
+      propertyPath: Name
+      value: Planet #5
+      objectReference: {fileID: 0}
     - target: {fileID: 2977064503454360078, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1184,6 +1200,10 @@ PrefabInstance:
     - target: {fileID: 1226517422905731925, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278377349999856308, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
+      propertyPath: Name
+      value: Planet #3
       objectReference: {fileID: 0}
     - target: {fileID: 2977064503454360078, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1357,38 +1377,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddf1abd95338489aa5e953f001a270a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &903773525 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7207275897469232668, guid: 922a3fcd633baa0498344270e9eabd2a, type: 3}
-  m_PrefabInstance: {fileID: 6121086404576301247}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &903773528
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 903773525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e1b016dcfa64180ac030b1127b21034, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Presenters::Game.Presenters.MoneyPresenter
-  _moneyView: {fileID: 903773529}
---- !u!114 &903773529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 903773525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d885adcb123e44ca8d4d257b6be9ccde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game.Views::Game.Views.MoneyView
-  _currentMoneyText: {fileID: 1085054125}
-  _coinIcon: {fileID: 0}
 --- !u!1 &974007725
 GameObject:
   m_ObjectHideFlags: 0
@@ -1529,6 +1517,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1278377349999856308, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
+      propertyPath: Name
+      value: Planet #8
+      objectReference: {fileID: 0}
     - target: {fileID: 2977064503454360078, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1607,34 +1599,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1226517422905731925, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
   m_PrefabInstance: {fileID: 1000499686}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1085054125 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3299675748291971791, guid: 922a3fcd633baa0498344270e9eabd2a, type: 3}
-  m_PrefabInstance: {fileID: 6121086404576301247}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &1242821851 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5564512366540979095, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
+--- !u!225 &1242821855 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 1454737383985074918, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
   m_PrefabInstance: {fileID: 7566780103441064638}
   m_PrefabAsset: {fileID: 0}
---- !u!225 &1242821855
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1242821851}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 0
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!1001 &1247079640
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1730,6 +1699,10 @@ PrefabInstance:
     - target: {fileID: 1226517422905731925, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1278377349999856308, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
+      propertyPath: Name
+      value: Planet #7
       objectReference: {fileID: 0}
     - target: {fileID: 2977064503454360078, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2097,6 +2070,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1278377349999856308, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
+      propertyPath: Name
+      value: Planet #6
+      objectReference: {fileID: 0}
     - target: {fileID: 2977064503454360078, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2175,6 +2152,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1226517422905731925, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
   m_PrefabInstance: {fileID: 1918786892}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2081935654 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 648301223005266422, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
+  m_PrefabInstance: {fileID: 7566780103441064638}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1052078977217180737
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2414,15 +2402,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7832056747382589570, guid: 922a3fcd633baa0498344270e9eabd2a, type: 3}
+    - {fileID: 7226052269953746544, guid: 922a3fcd633baa0498344270e9eabd2a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7207275897469232668, guid: 922a3fcd633baa0498344270e9eabd2a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 903773529}
-    - targetCorrespondingSourceObject: {fileID: 7207275897469232668, guid: 922a3fcd633baa0498344270e9eabd2a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 903773528}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 922a3fcd633baa0498344270e9eabd2a, type: 3}
 --- !u!224 &7237256081421283246 stripped
 RectTransform:
@@ -2522,7 +2505,11 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1278377349999856308, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
-      propertyPath: _incomeGroup
+      propertyPath: _coin
+      value: 
+      objectReference: {fileID: 2081935654}
+    - target: {fileID: 1278377349999856308, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
+      propertyPath: _progressGroup
       value: 
       objectReference: {fileID: 1242821855}
     - target: {fileID: 2977064503454360078, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
@@ -2572,10 +2559,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5564512366540979095, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1242821855}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 368c7b958afaee34caa5e1b9338e5e65, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

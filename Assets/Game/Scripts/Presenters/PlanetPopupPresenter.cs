@@ -1,5 +1,4 @@
 using System;
-using Game.Views;
 using Modules.Money;
 using Modules.Planets;
 using UnityEngine;
@@ -7,70 +6,72 @@ using Zenject;
 
 namespace Game.Presenters
 {
-    public class PlanetPopupPresenter : MonoBehaviour
+    public class PlanetPopupPresenter
     {
-        [SerializeField]
-        private PlanetPopupView _planetPopupView;
+        public event Action OnUpdateView;
+        public event Action<string> OnUpgraded;
+        public event Action<string> OnIncomeChanged;
+        public event Action<string> OnPopulationChanged;
+        public event Action OnUpdateUpgradeButton;
+        public event Action OnCloseClicked;
+        public string Name => _planet.Name;
+        public Sprite Icon => _planet.GetIcon(_planet.IsUnlocked);
+        public int Population => _planet.Population;
+        public int Level => _planet.Level;
+        public int MaxLevel => _planet.MaxLevel;
+        public int MinuteIncome => _planet.MinuteIncome;
+        public string Price => _planet.Price.ToString();
+        public bool IsUnlocked => _planet.IsUnlocked;
+        public bool CanUpgrade => _planet.CanUnlockOrUpgrade;
         
         private IPlanet _planet;
+        private readonly IMoneyStorage _moneyStorage;
 
-        private void Update()
+        public PlanetPopupPresenter(IMoneyStorage moneyStorage)
         {
-            UpdateUpgradeButton();
+            _moneyStorage = moneyStorage;
         }
 
         public void Show(IPlanet planet)
         {
-            this.gameObject.SetActive(true);
             _planet = planet;
-            _planetPopupView.OnUpgradeClicked += this.UpgradeClicked;
-            _planetPopupView.OnCloseClicked += this.CloseClicked;
             _planet.OnUpgraded += this.Upgraded;
-            _planet.OnIncomeChanged += this.IncomeChanged;
             _planet.OnPopulationChanged += this.PopulationChanged;
-            UpdateView();
+            _planet.OnIncomeChanged += this.IncomeChanged;
+            _moneyStorage.OnMoneyChanged += this.OnMoneyChanged;
+            OnUpdateView?.Invoke();
         }
 
         private void Hide()
         {
-            _planetPopupView.OnUpgradeClicked -= this.UpgradeClicked;
-            _planetPopupView.OnCloseClicked -= this.CloseClicked;
             _planet.OnUpgraded -= this.Upgraded;
-            _planet.OnIncomeChanged -= this.IncomeChanged;
             _planet.OnPopulationChanged -= this.PopulationChanged;
-            this.gameObject.SetActive(false);
+            _planet.OnIncomeChanged -= this.IncomeChanged;
+            _moneyStorage.OnMoneyChanged -= this.OnMoneyChanged;
             _planet = null;
         }
-
-        private void UpdateView()
+        
+        public void CloseClicked()
         {
-            _planetPopupView.SetAvatar(_planet.GetIcon(true));
-            _planetPopupView.SetName(_planet.Name);
-            _planetPopupView.SetPopulation(_planet.Population.ToString());
-            _planetPopupView.SetLevel($"{_planet.Level} / {_planet.MaxLevel}");
-            _planetPopupView.SetIncome($"{_planet.MinuteIncome} / sec");
-            _planetPopupView.SetPrice($"{_planet.Price}");
-            _planetPopupView.SetUpgradeAllowed(_planet.CanUpgrade);
+            OnCloseClicked?.Invoke();
+            this.Hide();
         }
 
-        private void PopulationChanged(int num) => _planetPopupView.SetPopulation($"{num.ToString()}");
-
-        private void IncomeChanged(int income) => _planetPopupView.SetIncome($"{income.ToString()} / sec");
-
-        private void Upgraded(int level) => _planetPopupView.SetLevel($"{_planet.Level} / {_planet.MaxLevel}");
-
-        private void CloseClicked() => this.Hide();
-
-        private void UpgradeClicked()
+        public void UpgradeClicked()
         {
             _planet.Upgrade();
-            UpdateUpgradeButton();
+            OnUpdateUpgradeButton?.Invoke();
         }
 
-        private void UpdateUpgradeButton()
+        private void OnMoneyChanged(int newValue, int prevValue)
         {
-            _planetPopupView.SetUpgradeAllowed(_planet.CanUpgrade);
-            _planetPopupView.SetPrice($"{_planet.Price}");
+            this.OnUpdateUpgradeButton?.Invoke();
         }
+
+        private void PopulationChanged(int num) => this.OnPopulationChanged?.Invoke(num.ToString());
+
+        private void IncomeChanged(int income) => this.OnIncomeChanged?.Invoke(income.ToString());
+
+        private void Upgraded(int level) => this.OnUpgraded?.Invoke($"{level / _planet.MaxLevel}");
     }
 }

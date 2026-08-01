@@ -9,11 +9,25 @@ namespace Game.Views
         public override void InstallBindings()
         {
             //TODO:
+            
+            this.Container.BindInterfacesAndSelfTo<PlanetView>()
+                .FromComponentsInHierarchy()
+                .AsCached();
+            
+            this.Container.BindInterfacesAndSelfTo<PlanetPopupView>()
+                .FromComponentInHierarchy()
+                .AsSingle();
+            
             this.Container.BindInterfacesAndSelfTo<Countdown>()
                 .AsSingle()
                 .NonLazy();
             
             this.Container.BindInterfacesAndSelfTo<ParticleAnimator>()
+                .FromComponentInHierarchy()
+                .AsSingle()
+                .NonLazy();
+            
+            this.Container.BindInterfacesAndSelfTo<MoneyView>()
                 .FromComponentInHierarchy()
                 .AsSingle()
                 .NonLazy();

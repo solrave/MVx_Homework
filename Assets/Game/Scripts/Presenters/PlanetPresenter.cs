@@ -6,100 +6,70 @@ using Zenject;
 
 namespace Game.Presenters
 {
-    public class PlanetPresenter : MonoBehaviour
+    public class PlanetPresenter : IInitializable, IDisposable
     {
-        public event Action<string, int> OnIncomeGathered;
+        public event Action OnIncomeGathered;
+        public event Action<Sprite> OnUnlocked;
+        public event Action<bool> OnIncomeReady;
+        public event Action<float, float> OnIncomeTimeChanged;
         
-        [SerializeField]
-        private PlanetView _planetView;
-
-        [SerializeField]
-        public string Name;
-
-        public Vector2 IncomeCoinPosition => _planetView.IncomeCoinPosition;
+        public Sprite Icon => _planet.GetIcon(_planet.IsUnlocked);
+        public string Price => _planet.Price.ToString();
+        public bool IsIncomeReady => _planet.IsIncomeReady;
         
         private PlanetPopupPresenter _planetPopup;
         private IPlanet _planet;
-
-        [Inject]
-        private void Construct(PlanetPopupPresenter planetPopup,
-            Countdown planetCountdown)
+        private MoneyPresenter _moneyPresenter;
+        
+        public PlanetPresenter(Planet planet, PlanetPopupPresenter planetPopup, MoneyPresenter moneyPresenter)
         {
             _planetPopup = planetPopup;
-        }
-
-        public void Initialize(IPlanet planet)
-        { 
+            _moneyPresenter = moneyPresenter;
             _planet = planet;
-            _planetView.SetIcon(_planet.GetIcon(false));
-            _planetView.SetPrice(_planet.Price.ToString());
         }
-
-        public void OnEnable()
+        
+        public void Initialize()
         {
-            _planetView.HideCoin();
-            _planetView.HideProgressBar();
-            _planet.OnIncomeReady += IncomeReady;
-            _planetView.OnPlanetHold += this.PlanetHold;
-            _planetView.OnPlanetClicked += this.PlanetClicked;
             _planet.OnUnlocked += this.PlanetUnlocked;
+            _planet.OnIncomeReady += IncomeReady;
             _planet.OnIncomeTimeChanged += this.IncomeTimeChanged;
-            _planet.OnGathered += this.IncomeGathered;
         }
-
-        public void OnDisable()
+        
+        public void Dispose()
         {
-            _planetView.HideCoin();
-            _planet.OnIncomeReady -= IncomeReady;
-            _planetView.OnPlanetHold -= this.PlanetHold;
-            _planetView.OnPlanetClicked -= this.PlanetClicked;
             _planet.OnUnlocked -= this.PlanetUnlocked;
+            _planet.OnIncomeReady -= IncomeReady;
             _planet.OnIncomeTimeChanged -= this.IncomeTimeChanged;
-            _planet.OnGathered -= this.IncomeGathered;
         }
         
-        private void IncomeTimeChanged(float time)
-        {
-            _planetView.HideCoin();
-            _planetView.ShowProgressBar();
-            _planetView.SetProgressFill(_planet.IncomeProgress);
-            _planetView.SetProgressText($"{time:0}");
-        }
-        
-        private void IncomeGathered(int count)
-        {
-            this.OnIncomeGathered?.Invoke(Name, count);
-            _planetView.HideCoin();
-            _planetView.ShowProgressBar();
-        }
-        
-        private void IncomeReady(bool obj)
-        {
-            _planetView.HideProgressBar();
-            _planetView.ShowCoin(); 
-        }
-        
-        private void PlanetClicked()
+        public void PlanetClicked()
         {
             if (_planet.CanUnlockOrUpgrade)
+            {
                 _planet.Unlock();
+                OnUnlocked?.Invoke(_planet.GetIcon(true));
+            }
             
             if (_planet.IsUnlocked && _planet.IsIncomeReady)
             {
                 _planet.GatherIncome();
+                OnIncomeGathered?.Invoke();
             }
         }
 
-        private void PlanetHold()
+        public void PlanetHold()
         {
             if (_planet.IsUnlocked)
                 _planetPopup.Show(_planet);
         }
         
-        private void PlanetUnlocked()
+        private void IncomeTimeChanged(float time)
         {
-            _planetView.SetIcon(_planet.GetIcon(true));
-            _planetView.HideLock();
+            this.OnIncomeTimeChanged?.Invoke(_planet.IncomeProgress, time);
         }
+
+        private void IncomeReady(bool state) => this.OnIncomeReady?.Invoke(state);
+        
+        private void PlanetUnlocked() => this.OnUnlocked?.Invoke(_planet.GetIcon(true));
     }
 }

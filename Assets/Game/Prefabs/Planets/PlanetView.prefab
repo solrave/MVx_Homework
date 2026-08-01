@@ -447,7 +447,6 @@ GameObject:
   - component: {fileID: 1226517422905731925}
   - component: {fileID: 7486801599208217449}
   - component: {fileID: 1278377349999856308}
-  - component: {fileID: 5941175228368085643}
   m_Layer: 5
   m_Name: PlanetView
   m_TagString: Untagged
@@ -499,28 +498,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 463749f53ed14f24baee64c682fe6cd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Views::PlanetView
+  Name: Planet #1
   _coin: {fileID: 648301223005266422}
-  _incomeGroup: {fileID: 7304924201504151740}
+  _progressGroup: {fileID: 1454737383985074918}
+  _priceGroup: {fileID: 3641297110106631583}
   _progressTime: {fileID: 8019802931863089282}
   _progressBar: {fileID: 6948507870913343312}
   _price: {fileID: 5444377921757551026}
   _planetIcon: {fileID: 606508972301849034}
   _planetLock: {fileID: 991180089803824017}
   _button: {fileID: 5583372068559771244}
---- !u!114 &5941175228368085643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1080244410604157239}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f0b860beb2d451e93f02b26418f8fb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Presenters.PlanetPresenter
-  _planetView: {fileID: 1278377349999856308}
-  Name: Planet #1
 --- !u!1 &5564512366540979095
 GameObject:
   m_ObjectHideFlags: 0
@@ -532,7 +519,7 @@ GameObject:
   - component: {fileID: 1921716995094703198}
   - component: {fileID: 7366688001666472230}
   - component: {fileID: 5072925286837728165}
-  - component: {fileID: 7304924201504151740}
+  - component: {fileID: 1454737383985074918}
   m_Layer: 5
   m_Name: Income
   m_TagString: Untagged
@@ -599,7 +586,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.2
---- !u!225 &7304924201504151740
+--- !u!225 &1454737383985074918
 CanvasGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -608,7 +595,7 @@ CanvasGroup:
   m_GameObject: {fileID: 5564512366540979095}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
+  m_Interactable: 0
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!1 &6740194235726008877
@@ -718,6 +705,7 @@ GameObject:
   - component: {fileID: 3033779123653569042}
   - component: {fileID: 6404032390609247133}
   - component: {fileID: 544170752107032563}
+  - component: {fileID: 3641297110106631583}
   m_Layer: 5
   m_Name: Price
   m_TagString: Untagged
@@ -786,6 +774,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 0
+--- !u!225 &3641297110106631583
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6850814019076832775}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7085741634984397813
 GameObject:
   m_ObjectHideFlags: 0

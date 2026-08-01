@@ -1,34 +1,28 @@
 using System;
-using Game.Views;
 using Modules.Money;
 using UnityEngine;
 using Zenject;
 
 namespace Game.Presenters
 {
-    public class MoneyPresenter : MonoBehaviour
+    public class MoneyPresenter : IInitializable, IDisposable
     {
-        [SerializeField]
-        private MoneyView _moneyView;
-        
+        public event Action<string> OnUpdateView;
+        public string Money => _moneyStorage.Money.ToString();
         private MoneyStorage _moneyStorage;
-        
-        public Vector2 IncomeCoinPosition => _moneyView.IncomeCoinPosition;
 
-        [Inject]
-        public void Construct(MoneyStorage moneyStorage)
+        public MoneyPresenter(MoneyStorage moneyStorage)
         {
             _moneyStorage = moneyStorage;
-            _moneyView.UpdateView(_moneyStorage.Money.ToString());
         }
 
-        private void OnEnable()
+        public void Initialize()
         {
             _moneyStorage.OnMoneyChanged += this.MoneyChanged;
             _moneyStorage.OnMoneySpent += this.MoneySpent;
         }
 
-        private void OnDisable()
+        public void Dispose()
         {
             _moneyStorage.OnMoneyChanged -= this.MoneyChanged;
             _moneyStorage.OnMoneySpent -= this.MoneySpent;
@@ -41,7 +35,7 @@ namespace Game.Presenters
 
         private void MoneyChanged(int newValue, int prevValue)
         {
-            _moneyView.UpdateView(newValue.ToString());
+            OnUpdateView?.Invoke(newValue.ToString());
         }
     }
 }
