@@ -38,6 +38,7 @@ namespace Game.Presenters
         public void OnEnable()
         {
             _planetView.HideCoin();
+            _planetView.HideProgressBar();
             _planet.OnIncomeReady += IncomeReady;
             _planetView.OnPlanetHold += this.PlanetHold;
             _planetView.OnPlanetClicked += this.PlanetClicked;
