@@ -1,6 +1,5 @@
 using System;
 using Modules.Planets;
-using Modules.Utils;
 using UnityEngine;
 using Zenject;
 
@@ -59,7 +58,6 @@ namespace Game.Presenters
         {
             if (_planet.IsUnlocked)
             {
-                Debug.Log("Planet hold");
                 _planetPopup.Show(_planet);
             }
         }

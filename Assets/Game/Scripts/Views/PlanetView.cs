@@ -1,5 +1,3 @@
-using System;
-using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 using Modules.UI;
@@ -52,7 +50,7 @@ public class PlanetView : MonoBehaviour
     private void AnimateIncomeGathering()
     {
         _coinAnimator.Emit(_coin.rectTransform.position,
-            _moneyViewCoinPosition);
+           new Vector2(45,420) );//_moneyViewCoinPosition
     }
 
     private void OnDestroy()
@@ -65,7 +63,6 @@ public class PlanetView : MonoBehaviour
         }
     }
 
-    public Vector2 IncomeCoinPosition => this._coin.gameObject.transform.position;
     private void ShowCoin() => _coin.enabled = true;
     private void HideCoin() => _coin.enabled = false;
     private void SetProgressText(string text) => this._progressTime.SetText(text);
@@ -88,7 +85,7 @@ public class PlanetView : MonoBehaviour
         HideCoin();
         ShowProgressBar();
         SetProgressFill(incomeProgress);
-        SetProgressText(remainingTime.ToString(CultureInfo.CurrentCulture));
+        SetProgressText(Mathf.CeilToInt(remainingTime).ToString("F0"));
     }
     
     private void IncomeReady(bool obj)

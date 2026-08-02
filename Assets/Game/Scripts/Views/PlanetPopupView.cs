@@ -1,8 +1,6 @@
-using System;
 using Game.Presenters;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 using Zenject;
 
@@ -69,7 +67,7 @@ namespace Game.Views
             SetName(_presenter.Name);
             SetPopulation(_presenter.Population.ToString());
             SetLevel($"{_presenter.Level} / {_presenter.MaxLevel}");
-            SetIncome($"{_presenter.MinuteIncome} / sec");
+            SetIncome($"{_presenter.MinuteIncome}");
             SetPrice($"{_presenter.Price}");
             SetUpgradeAllowed(_presenter.CanUpgrade);
         }
@@ -86,7 +84,7 @@ namespace Game.Views
         private void SetName(string planetName) => _name.text = planetName;
         private void SetPopulation(string populationCount) => _population.text = $"Population: {populationCount}";
         private void SetLevel(string level) => _level.text = $"Level: {level}";
-        private void SetIncome(string income) => _income.text = $"Income: {income}";
+        private void SetIncome(string income) => _income.text = $"Income: {income} / sec";
         private void SetPrice(string price) => _price.text = $"Price: {price}";
         private void SetUpgradeAllowed(bool allowed) => _upgradeButton.interactable = allowed;
     }
