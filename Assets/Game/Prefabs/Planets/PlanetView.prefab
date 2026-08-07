@@ -296,7 +296,7 @@ MonoBehaviour:
   m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
-  m_FillOrigin: 0
+  m_FillOrigin: 1
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!1 &839794370055971844
@@ -500,7 +500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game.Views::PlanetView
   _coin: {fileID: 648301223005266422}
-  _incomeGroup: {fileID: 7304924201504151740}
+  _progressGroup: {fileID: 5564512366540979095}
   _progressTime: {fileID: 8019802931863089282}
   _progressBar: {fileID: 6948507870913343312}
   _price: {fileID: 5444377921757551026}

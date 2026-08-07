@@ -30,10 +30,10 @@ namespace Game.Views
         
         public void SetAvatar(Sprite icon) => _avatar.sprite = icon;
         public void SetName(string planetName) => _name.text = planetName;
-        public void SetPopulation(string populationCount) => _population.text = $"Population: {populationCount}";
-        public void SetLevel(string level) => _level.text = $"Level: {level}";
-        public void SetIncome(string income) => _income.text = $"Income: {income}";
-        public void SetPrice(string price) => _price.text = $"Price: {price}";
+        public void SetPopulation(string populationCount) => _population.text = populationCount;
+        public void SetLevel(string level) => _level.text = level;
+        public void SetIncome(string income) => _income.text = income;
+        public void SetPrice(string price) => _price.text = price;
         public void SetUpgradeAllowed(bool allowed) => _upgradeButton.interactable = allowed;
     }
 }

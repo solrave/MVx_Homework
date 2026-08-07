@@ -23,7 +23,7 @@ namespace Game.Presenters
                 .FromComponentInHierarchy()
                 .AsSingle();
             
-            this.Container.BindInterfacesAndSelfTo<PlanetManager>()
+            this.Container.BindInterfacesAndSelfTo<PlanetCollectionPresenter>()
                 .AsSingle()
                 .NonLazy();
             

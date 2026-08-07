@@ -9,10 +9,6 @@ namespace Game.Views
         public override void InstallBindings()
         {
             //TODO:
-            this.Container.BindInterfacesAndSelfTo<Countdown>()
-                .AsSingle()
-                .NonLazy();
-            
             this.Container.BindInterfacesAndSelfTo<ParticleAnimator>()
                 .FromComponentInHierarchy()
                 .AsSingle()

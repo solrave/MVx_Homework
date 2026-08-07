@@ -19,7 +19,7 @@ public class PlanetView : MonoBehaviour
     }
 
     [SerializeField] private Image _coin;
-    [SerializeField] private CanvasGroup _incomeGroup;
+    [SerializeField] private GameObject _progressGroup;
     [SerializeField] private TMP_Text _progressTime;
     [SerializeField] private Image _progressBar;
     [SerializeField] private TMP_Text _price;
@@ -28,8 +28,6 @@ public class PlanetView : MonoBehaviour
     [SerializeField] private SmartButton _button;
     
     public Vector2 IncomeCoinPosition => this._coin.gameObject.transform.position;
-    public void Show() => this.gameObject.SetActive(true);
-    public void Hide() => this.gameObject.SetActive(false);
     public void ShowCoin() => _coin.enabled = true;
     public void HideCoin() => _coin.enabled = false;
     public void SetProgressText(string text) => this._progressTime.SetText(text);
@@ -37,6 +35,6 @@ public class PlanetView : MonoBehaviour
     public void SetPrice(string text) => this._price.SetText(text);
     public void SetIcon(Sprite icon) => this._planetIcon.sprite = icon;
     public void HideLock() => _planetLock.gameObject.SetActive(false);
-    public void HideProgressBar() => _incomeGroup.alpha = 0;
-    public void ShowProgressBar() => _incomeGroup.alpha = 1;
+    public void HideProgressBar() => _progressGroup.SetActive(false);
+    public void ShowProgressBar() => _progressGroup.SetActive(true);
 }

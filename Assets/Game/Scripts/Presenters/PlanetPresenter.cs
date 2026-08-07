@@ -1,6 +1,5 @@
-using System;
 using Modules.Planets;
-using Modules.Utils;
+using Modules.UI;
 using UnityEngine;
 using Zenject;
 
@@ -8,24 +7,26 @@ namespace Game.Presenters
 {
     public class PlanetPresenter : MonoBehaviour
     {
-        public event Action<string, int> OnIncomeGathered;
         
         [SerializeField]
         private PlanetView _planetView;
 
         [SerializeField]
         public string Name;
-
-        public Vector2 IncomeCoinPosition => _planetView.IncomeCoinPosition;
         
         private PlanetPopupPresenter _planetPopup;
         private IPlanet _planet;
+        private ParticleAnimator _coinAnimator;
+        private MoneyPresenter _moneyPresenter;
 
         [Inject]
-        private void Construct(PlanetPopupPresenter planetPopup,
-            Countdown planetCountdown)
+        private void Construct(ParticleAnimator coinAnimator,
+            PlanetPopupPresenter planetPopup,
+            MoneyPresenter moneyPresenter)
         {
             _planetPopup = planetPopup;
+            _coinAnimator = coinAnimator;
+            _moneyPresenter = moneyPresenter; 
         }
 
         public void Initialize(IPlanet planet)
@@ -63,12 +64,11 @@ namespace Game.Presenters
             _planetView.HideCoin();
             _planetView.ShowProgressBar();
             _planetView.SetProgressFill(_planet.IncomeProgress);
-            _planetView.SetProgressText($"{time:0}");
+            _planetView.SetProgressText($"{time: 00:00}");
         }
         
         private void IncomeGathered(int count)
         {
-            this.OnIncomeGathered?.Invoke(Name, count);
             _planetView.HideCoin();
             _planetView.ShowProgressBar();
         }
@@ -87,6 +87,7 @@ namespace Game.Presenters
             if (_planet.IsUnlocked && _planet.IsIncomeReady)
             {
                 _planet.GatherIncome();
+                AnimateIncome();
             }
         }
 
@@ -100,6 +101,12 @@ namespace Game.Presenters
         {
             _planetView.SetIcon(_planet.GetIcon(true));
             _planetView.HideLock();
+        }
+        
+        private void AnimateIncome()
+        {
+            _coinAnimator.Emit(_planetView.IncomeCoinPosition,
+                _moneyPresenter.IncomeCoinPosition);
         }
     }
 }

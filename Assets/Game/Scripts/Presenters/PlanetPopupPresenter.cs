@@ -46,10 +46,10 @@ namespace Game.Presenters
         {
             _planetPopupView.SetAvatar(_planet.GetIcon(true));
             _planetPopupView.SetName(_planet.Name);
-            _planetPopupView.SetPopulation(_planet.Population.ToString());
-            _planetPopupView.SetLevel($"{_planet.Level} / {_planet.MaxLevel}");
-            _planetPopupView.SetIncome($"{_planet.MinuteIncome} / sec");
-            _planetPopupView.SetPrice($"{_planet.Price}");
+            _planetPopupView.SetPopulation($"Population: {_planet.Population.ToString()}");
+            _planetPopupView.SetLevel($"Level: {_planet.Level} / {_planet.MaxLevel}");
+            _planetPopupView.SetIncome($"Income: {_planet.MinuteIncome} / sec");
+            _planetPopupView.SetPrice($"Price: {_planet.Price}");
             _planetPopupView.SetUpgradeAllowed(_planet.CanUpgrade);
         }
 
@@ -70,7 +70,10 @@ namespace Game.Presenters
         private void UpdateUpgradeButton()
         {
             _planetPopupView.SetUpgradeAllowed(_planet.CanUpgrade);
-            _planetPopupView.SetPrice($"{_planet.Price}");
+            _planetPopupView.SetPrice(
+                !_planet.IsMaxLevel
+                ? $"{_planet.Price}"
+                : "Fully upgraded");
         }
     }
 }
