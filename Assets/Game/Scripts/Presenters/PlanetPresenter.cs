@@ -7,12 +7,13 @@ namespace Game.Presenters
 {
     public class PlanetPresenter : MonoBehaviour
     {
+        public string Name => _config.Name;
         
         [SerializeField]
         private PlanetView _planetView;
 
         [SerializeField]
-        public string Name;
+        private PlanetConfig _config;
         
         private PlanetPopupPresenter _planetPopup;
         private IPlanet _planet;
@@ -36,7 +37,7 @@ namespace Game.Presenters
             _planetView.SetPrice(_planet.Price.ToString());
         }
 
-        public void OnEnable()
+        public void Start()
         {
             _planetView.HideCoin();
             _planetView.HideProgressBar();

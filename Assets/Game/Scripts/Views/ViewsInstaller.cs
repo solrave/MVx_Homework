@@ -1,5 +1,3 @@
-using Modules.UI;
-using Modules.Utils;
 using Zenject;
 
 namespace Game.Views
@@ -8,11 +6,7 @@ namespace Game.Views
     {
         public override void InstallBindings()
         {
-            //TODO:
-            this.Container.BindInterfacesAndSelfTo<ParticleAnimator>()
-                .FromComponentInHierarchy()
-                .AsSingle()
-                .NonLazy();
+            
         }
     }
 }

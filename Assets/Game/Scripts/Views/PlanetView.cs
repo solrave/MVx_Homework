@@ -28,8 +28,8 @@ public class PlanetView : MonoBehaviour
     [SerializeField] private SmartButton _button;
     
     public Vector2 IncomeCoinPosition => this._coin.gameObject.transform.position;
-    public void ShowCoin() => _coin.enabled = true;
-    public void HideCoin() => _coin.enabled = false;
+    public void ShowCoin() => _coin.gameObject.SetActive(true);
+    public void HideCoin() => _coin.gameObject.SetActive(false);
     public void SetProgressText(string text) => this._progressTime.SetText(text);
     public void SetProgressFill(float value) => this._progressBar.fillAmount = value;
     public void SetPrice(string text) => this._price.SetText(text);

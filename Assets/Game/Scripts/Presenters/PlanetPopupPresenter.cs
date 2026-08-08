@@ -1,6 +1,4 @@
-using System;
 using Game.Views;
-using Modules.Money;
 using Modules.Planets;
 using UnityEngine;
 using Zenject;
@@ -13,12 +11,15 @@ namespace Game.Presenters
         private PlanetPopupView _planetPopupView;
         
         private IPlanet _planet;
+        private MoneyPresenter _moneyPresenter;
+        private bool IfEnoughMoney => _moneyPresenter.Money >= _planet.Price;
 
-        private void Update()
+        [Inject]
+        private void Construct(MoneyPresenter presenter)
         {
-            UpdateUpgradeButton();
+            _moneyPresenter = presenter;            
         }
-
+        
         public void Show(IPlanet planet)
         {
             this.gameObject.SetActive(true);
@@ -28,6 +29,7 @@ namespace Game.Presenters
             _planet.OnUpgraded += this.Upgraded;
             _planet.OnIncomeChanged += this.IncomeChanged;
             _planet.OnPopulationChanged += this.PopulationChanged;
+            _moneyPresenter.OnMoneyChanged += this.SetUpgradeButtonInteractable;
             UpdateView();
         }
 
@@ -38,6 +40,7 @@ namespace Game.Presenters
             _planet.OnUpgraded -= this.Upgraded;
             _planet.OnIncomeChanged -= this.IncomeChanged;
             _planet.OnPopulationChanged -= this.PopulationChanged;
+            _moneyPresenter.OnMoneyChanged -= this.SetUpgradeButtonInteractable;
             this.gameObject.SetActive(false);
             _planet = null;
         }
@@ -46,34 +49,49 @@ namespace Game.Presenters
         {
             _planetPopupView.SetAvatar(_planet.GetIcon(true));
             _planetPopupView.SetName(_planet.Name);
-            _planetPopupView.SetPopulation($"Population: {_planet.Population.ToString()}");
-            _planetPopupView.SetLevel($"Level: {_planet.Level} / {_planet.MaxLevel}");
-            _planetPopupView.SetIncome($"Income: {_planet.MinuteIncome} / sec");
+            this.PopulationChanged(_planet.Population);
+            this.Upgraded(_planet.Level / _planet.MaxLevel);
+            this.IncomeChanged(_planet.MinuteIncome);
             _planetPopupView.SetPrice($"Price: {_planet.Price}");
             _planetPopupView.SetUpgradeAllowed(_planet.CanUpgrade);
+            SetUpgradeButtonInteractable(IfEnoughMoney);
         }
 
-        private void PopulationChanged(int num) => _planetPopupView.SetPopulation($"{num.ToString()}");
+        private void PopulationChanged(int num)
+            => _planetPopupView.SetPopulation($"Population: {num.ToString()}");
 
-        private void IncomeChanged(int income) => _planetPopupView.SetIncome($"{income.ToString()} / sec");
+        private void IncomeChanged(int income)
+            => _planetPopupView.SetIncome($"Income: {income.ToString()} / sec");
 
-        private void Upgraded(int level) => _planetPopupView.SetLevel($"{_planet.Level} / {_planet.MaxLevel}");
+        private void Upgraded(int level) 
+            => _planetPopupView.SetLevel($"Level: {_planet.Level} / {_planet.MaxLevel}");
 
         private void CloseClicked() => this.Hide();
 
-        private void UpgradeClicked()
+        private void SetUpgradeButtonInteractable()
         {
-            _planet.Upgrade();
-            UpdateUpgradeButton();
+            if (!_planet.IsMaxLevel)
+                SetUpgradeButtonInteractable(IfEnoughMoney);
         }
 
-        private void UpdateUpgradeButton()
+        private void UpgradeClicked()
         {
-            _planetPopupView.SetUpgradeAllowed(_planet.CanUpgrade);
+            if (_planet.IsMaxLevel)
+                return;
+            
+            _planet.Upgrade();
+            SetUpgradeButtonInteractable(IfEnoughMoney);
+        }
+
+        private void SetUpgradeButtonInteractable(bool upgradeAllowed)
+        {
+            _planetPopupView.SetUpgradeAllowed(upgradeAllowed);
             _planetPopupView.SetPrice(
                 !_planet.IsMaxLevel
                 ? $"{_planet.Price}"
                 : "Fully upgraded");
+            if (_planet.IsMaxLevel)
+                _planetPopupView.SetUpgradeAllowed(false);
         }
     }
 }

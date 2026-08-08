@@ -9,9 +9,12 @@ namespace Game.Presenters
 {
     public class MoneyPresenter : MonoBehaviour
     {
+        public event Action OnMoneyChanged; 
+        public int Money => _moneyStorage.Money;
+        
         [SerializeField]
         private MoneyView _moneyView;
-        
+            
         private MoneyStorage _moneyStorage;
         private int _currentDisplayedCoins = 0;
         private Coroutine _countCoroutine;
@@ -45,7 +48,8 @@ namespace Game.Presenters
         private void MoneyChanged(int newValue, int prevValue)
         { 
             _moneyView.UpdateView(newValue.ToString());
-            StartCoroutine(CountCoinsCoroutine(prevValue, newValue));
+            _countCoroutine = StartCoroutine(CountCoinsCoroutine(prevValue, newValue));
+            this.OnMoneyChanged?.Invoke();
         }
         
         private IEnumerator CountCoinsCoroutine(int startValue, int targetValue)
