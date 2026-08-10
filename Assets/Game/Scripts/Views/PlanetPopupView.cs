@@ -17,12 +17,12 @@ namespace Game.Views
         [SerializeField] private Button _upgradeButton;
         [SerializeField] private Button _closeButton;
         
-        private PlanetPopupPresenter _presenter;
+        private PlanetPopupPresentation _presentation;
         
         [Inject]
-        public void Construct(PlanetPopupPresenter presenter)
+        public void Construct(PlanetPopupPresentation presentation)
         {
-            _presenter = presenter;
+            _presentation = presentation;
             Subscribe();
         }
 
@@ -38,44 +38,44 @@ namespace Game.Views
         
         private void Subscribe()
         {
-            _closeButton.onClick.AddListener(_presenter.CloseClicked);
-            _upgradeButton.onClick.AddListener(_presenter.UpgradeClicked);
-            _presenter.OnUpdateView += this.UpdateView;
-            _presenter.OnUpdateUpgradeButton += this.UpdateUpgradeButton;
-            _presenter.OnCloseClicked += this.Hide;
-            _presenter.OnUpgraded += this.SetLevel;
-            _presenter.OnPopulationChanged += this.SetPopulation;
-            _presenter.OnIncomeChanged += this.SetIncome;
+            _closeButton.onClick.AddListener(_presentation.CloseClicked);
+            _upgradeButton.onClick.AddListener(_presentation.UpgradeClicked);
+            _presentation.OnUpdateView += this.UpdateView;
+            _presentation.OnUpdateUpgradeButton += this.UpdateUpgradeButton;
+            _presentation.OnCloseClicked += this.Hide;
+            _presentation.OnUpgraded += this.SetLevel;
+            _presentation.OnPopulationChanged += this.SetPopulation;
+            _presentation.OnIncomeChanged += this.SetIncome;
         }
 
         private void Unsubscribe()
         {
-            _closeButton.onClick.RemoveListener(_presenter.CloseClicked);
-            _upgradeButton.onClick.RemoveListener(_presenter.UpgradeClicked);
-            _presenter.OnUpdateView -= this.UpdateView;
-            _presenter.OnUpdateUpgradeButton -= this.UpdateUpgradeButton;
-            _presenter.OnCloseClicked -= this.Hide;
-            _presenter.OnUpgraded -= this.SetLevel;
-            _presenter.OnPopulationChanged -= this.SetPopulation;
-            _presenter.OnIncomeChanged -= this.SetIncome;
+            _closeButton.onClick.RemoveListener(_presentation.CloseClicked);
+            _upgradeButton.onClick.RemoveListener(_presentation.UpgradeClicked);
+            _presentation.OnUpdateView -= this.UpdateView;
+            _presentation.OnUpdateUpgradeButton -= this.UpdateUpgradeButton;
+            _presentation.OnCloseClicked -= this.Hide;
+            _presentation.OnUpgraded -= this.SetLevel;
+            _presentation.OnPopulationChanged -= this.SetPopulation;
+            _presentation.OnIncomeChanged -= this.SetIncome;
         }
 
         private void UpdateView()
         {
             Show();
-            SetAvatar(_presenter.Icon);
-            SetName(_presenter.Name);
-            SetPopulation(_presenter.Population.ToString());
-            SetLevel($"{_presenter.Level} / {_presenter.MaxLevel}");
-            SetIncome($"{_presenter.MinuteIncome}");
-            SetPrice($"{_presenter.Price}");
-            SetUpgradeAllowed(_presenter.CanUpgrade);
+            SetAvatar(_presentation.Icon);
+            SetName(_presentation.Name);
+            SetPopulation(_presentation.Population.ToString());
+            SetLevel($"{_presentation.Level} / {_presentation.MaxLevel}");
+            SetIncome($"{_presentation.MinuteIncome}");
+            SetPrice($"{_presentation.Price}");
+            SetUpgradeAllowed(_presentation.CanUpgrade);
         }
         
         private void UpdateUpgradeButton()
         {
-            SetUpgradeAllowed(_presenter.CanUpgrade);
-            SetPrice($"{_presenter.Price}");
+            SetUpgradeAllowed(_presentation.CanUpgrade);
+            SetPrice($"{_presentation.Price}");
         }
         
         private void Hide() => this.gameObject.SetActive(false);

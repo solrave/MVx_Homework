@@ -5,61 +5,62 @@ using TMPro;
 using Zenject;
 using Game.Presenters;
 using Game.Views;
+using Modules.Planets;
 
-public class PlanetView : MonoBehaviour
+public class PlanetView : MonoBehaviour, IPlanetView
 {
-   [SerializeField] public string Name;
+   [SerializeField] public string Name => _planetConfig.Name;
+   [SerializeField] private PlanetConfig _planetConfig;
     
-    [SerializeField] private Image _coin;
-    [SerializeField] private CanvasGroup _progressGroup;
-    [SerializeField] private CanvasGroup _priceGroup;
-    [SerializeField] private TMP_Text _progressTime;
-    [SerializeField] private Image _progressBar;
-    [SerializeField] private TMP_Text _price;
-    [SerializeField] private Image _planetIcon;
-    [SerializeField] private Image _planetLock;
-    [SerializeField] private SmartButton _button;
+   [SerializeField] private Image _coin;
+   [SerializeField] private CanvasGroup _progressGroup;
+   [SerializeField] private CanvasGroup _priceGroup;
+   [SerializeField] private TMP_Text _progressTime;
+   [SerializeField] private Image _progressBar;
+   [SerializeField] private TMP_Text _price;
+   [SerializeField] private Image _planetIcon;
+   [SerializeField] private Image _planetLock;
+   [SerializeField] private SmartButton _button;
     
-    private PlanetPresenter _presenter;
+    private PlanetPresentation _presentation;
     private ParticleAnimator _coinAnimator;
-    private Vector2 _moneyViewCoinPosition;
+    private MoneyView _moneyView;
 
     [Inject]
     public void Construct(ParticleAnimator coinAnimator, MoneyView moneyView)
     {
         _coinAnimator = coinAnimator;
-        _moneyViewCoinPosition = moneyView.IncomeCoinPosition;
-        Debug.Log($"COIN POSITION: {_moneyViewCoinPosition}");
+        _moneyView = moneyView;
     }
 
-    public void Initialize(PlanetPresenter presenter)
+    public void Initialize(PlanetPresentation presentation)
     {
-        _presenter = presenter;
+        _presentation = presentation;
         HideCoin();
         HideProgressBar();
-        SetPrice(_presenter.Price);
-        SetIcon(_presenter.Icon);
-        _button.OnHold += _presenter.PlanetHold;
-        _button.OnClick += _presenter.PlanetClicked;
-        _presenter.OnIncomeGathered += this.AnimateIncomeGathering;
-        _presenter.OnUnlocked += this.PlanetUnlocked;
-        _presenter.OnIncomeReady += IncomeReady;
-        _presenter.OnIncomeTimeChanged += this.IncomeTimeChanged;
+        SetPrice(_presentation.Price);
+        SetIcon(_presentation.Icon);
+        _button.OnHold += _presentation.PlanetHold;
+        _button.OnClick += _presentation.PlanetClicked;
+        _presentation.OnIncomeGathered += this.AnimateIncomeGathering;
+        _presentation.OnUnlocked += this.PlanetUnlocked;
+        _presentation.OnIncomeReady += IncomeReady;
+        _presentation.OnIncomeTimeChanged += this.IncomeTimeChanged;
     }
 
     private void AnimateIncomeGathering()
     {
         _coinAnimator.Emit(_coin.rectTransform.position,
-           new Vector2(45,420) );//_moneyViewCoinPosition
+            _moneyView.CoinPosition);
     }
 
     private void OnDestroy()
     {
-        if (_presenter != null)
+        if (_presentation != null)
         {
-            _presenter.OnUnlocked -= this.PlanetUnlocked;
-            _presenter.OnIncomeReady -= IncomeReady;
-            _presenter.OnIncomeTimeChanged -= this.IncomeTimeChanged;
+            _presentation.OnUnlocked -= this.PlanetUnlocked;
+            _presentation.OnIncomeReady -= IncomeReady;
+            _presentation.OnIncomeTimeChanged -= this.IncomeTimeChanged;
         }
     }
 
@@ -76,7 +77,7 @@ public class PlanetView : MonoBehaviour
     
     private void IncomeTimeChanged(float incomeProgress, float remainingTime)
     {
-        if (_presenter.IsIncomeReady)
+        if (_presentation.IsIncomeReady)
         {
             ShowCoin();
             HideProgressBar();
@@ -85,7 +86,7 @@ public class PlanetView : MonoBehaviour
         HideCoin();
         ShowProgressBar();
         SetProgressFill(incomeProgress);
-        SetProgressText(Mathf.CeilToInt(remainingTime).ToString("F0"));
+        SetProgressText(Mathf.CeilToInt(remainingTime).ToString("F0:00"));
     }
     
     private void IncomeReady(bool obj)
