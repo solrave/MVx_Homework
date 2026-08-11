@@ -2,11 +2,13 @@ using System;
 using Modules.Money;
 using Modules.Planets;
 using UnityEngine;
+using R3;
 
 namespace Game.Presenters
 {
     public class PlanetPopupPresentation
     {
+        //public ReactiveProperty<string> NameProperty { get; } = new ReactiveProperty<string>("");
         public event Action OnUpdateView;
         public event Action<string> OnUpgraded;
         public event Action<string> OnIncomeChanged;
