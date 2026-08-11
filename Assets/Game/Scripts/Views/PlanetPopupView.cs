@@ -66,26 +66,26 @@ namespace Game.Views
             SetAvatar(_presentation.Icon);
             SetName(_presentation.Name);
             SetPopulation(_presentation.Population.ToString());
-            SetLevel($"{_presentation.Level} / {_presentation.MaxLevel}");
-            SetIncome($"{_presentation.MinuteIncome}");
-            SetPrice($"{_presentation.Price}");
+            SetLevel($"Level: {_presentation.Level} / {_presentation.MaxLevel}");
+            SetIncome($"Income: {_presentation.MinuteIncome}");
+            SetPrice($"Price: {_presentation.Price}");
             SetUpgradeAllowed(_presentation.CanUpgrade);
         }
         
-        private void UpdateUpgradeButton()
+        private void UpdateUpgradeButton(bool allowed)
         {
-            SetUpgradeAllowed(_presentation.CanUpgrade);
-            SetPrice($"{_presentation.Price}");
+            SetPrice(!allowed ? "Fully Upgraded" : $"Price: {_presentation.Price}");
+            SetUpgradeAllowed(allowed);
         }
         
         private void Hide() => this.gameObject.SetActive(false);
         private void Show() => this.gameObject.SetActive(true);
         private void SetAvatar(Sprite icon) => _avatar.sprite = icon;
         private void SetName(string planetName) => _name.text = planetName;
-        private void SetPopulation(string populationCount) => _population.text = $"Population: {populationCount}";
-        private void SetLevel(string level) => _level.text = $"Level: {level}";
-        private void SetIncome(string income) => _income.text = $"Income: {income} / sec";
-        private void SetPrice(string price) => _price.text = $"Price: {price}";
+        private void SetPopulation(string populationCount) => _population.text = populationCount;
+        private void SetLevel(string level) => _level.text = level;
+        private void SetIncome(string income) => _income.text = income;
+        private void SetPrice(string price) => _price.text = price;
         private void SetUpgradeAllowed(bool allowed) => _upgradeButton.interactable = allowed;
     }
 }

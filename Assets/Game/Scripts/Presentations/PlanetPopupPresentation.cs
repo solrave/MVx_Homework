@@ -12,7 +12,7 @@ namespace Game.Presenters
         public event Action<string> OnUpgraded;
         public event Action<string> OnIncomeChanged;
         public event Action<string> OnPopulationChanged;
-        public event Action OnUpdateUpgradeButton;
+        public event Action<bool> OnUpdateUpgradeButton;
         public event Action OnCloseClicked;
         public string Name => _planet.Name;
         public Sprite Icon => _planet.GetIcon(_planet.IsUnlocked);
@@ -22,6 +22,7 @@ namespace Game.Presenters
         public int MinuteIncome => _planet.MinuteIncome;
         public string Price => _planet.Price.ToString();
         public bool CanUpgrade => _planet.CanUnlockOrUpgrade;
+        public bool EnoughMoney => _moneyStorage.Money > _planet.Price;
         
         private IPlanet _planet;
         private readonly IMoneyStorage _moneyStorage;
@@ -58,13 +59,20 @@ namespace Game.Presenters
 
         public void UpgradeClicked()
         {
-            _planet.Upgrade();
-            OnUpdateUpgradeButton?.Invoke();
+            if (_moneyStorage.Money > _planet.Price)
+            {
+                _planet.Upgrade();
+                OnUpdateUpgradeButton?.Invoke(true);
+            }
+
+            if (_planet.IsMaxLevel)
+                OnUpdateUpgradeButton?.Invoke(false);
+            
         }
 
         private void OnMoneyChanged(int newValue, int prevValue)
         {
-            this.OnUpdateUpgradeButton?.Invoke();
+            this.OnUpdateUpgradeButton?.Invoke(EnoughMoney);
         }
 
         private void PopulationChanged(int num) => this.OnPopulationChanged?.Invoke(num.ToString());

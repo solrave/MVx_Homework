@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Modules.UI;
@@ -9,6 +10,7 @@ using Modules.Planets;
 
 public class PlanetView : MonoBehaviour, IPlanetView
 {
+    private const string FORMAT = @"mm\:ss";
    [SerializeField] public string Name => _planetConfig.Name;
    [SerializeField] private PlanetConfig _planetConfig;
     
@@ -83,10 +85,11 @@ public class PlanetView : MonoBehaviour, IPlanetView
             HideProgressBar();
         }
         
+        var time = TimeSpan.FromSeconds(Mathf.CeilToInt(remainingTime));
         HideCoin();
         ShowProgressBar();
         SetProgressFill(incomeProgress);
-        SetProgressText(Mathf.CeilToInt(remainingTime).ToString("F0:00"));
+        SetProgressText(time.ToString(FORMAT));
     }
     
     private void IncomeReady(bool obj)
