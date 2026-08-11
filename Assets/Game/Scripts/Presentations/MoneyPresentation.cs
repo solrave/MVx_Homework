@@ -1,6 +1,5 @@
 using System;
 using Modules.Money;
-using UnityEngine;
 using Zenject;
 
 namespace Game.Presenters
@@ -9,7 +8,7 @@ namespace Game.Presenters
     {
         public event Action<string> OnUpdateView;
         public string Money => _moneyStorage.Money.ToString();
-        private MoneyStorage _moneyStorage;
+        private readonly MoneyStorage _moneyStorage;
 
         public MoneyPresentation(MoneyStorage moneyStorage)
         {

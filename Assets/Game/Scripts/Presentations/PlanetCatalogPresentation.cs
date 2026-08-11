@@ -10,7 +10,7 @@ namespace Game.Presenters
     {
         private readonly Dictionary<string, PlanetPresentation> _planetPresenters = new();
         private readonly Dictionary<string, IPlanetView> _planetViews;
-        private IInstantiator _instantiator;
+        private readonly IInstantiator _instantiator;
 
         public PlanetCatalogPresentation(List<Planet> planets,
             List<IPlanetView>  planetViews,

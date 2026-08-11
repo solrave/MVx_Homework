@@ -8,8 +8,6 @@ namespace Game.Views
     {
         public override void InstallBindings()
         {
-            //TODO:
-            
             this.Container.BindInterfacesAndSelfTo<PlanetView>()
                 .FromComponentsInHierarchy(includeInactive: true)
                 .AsCached();

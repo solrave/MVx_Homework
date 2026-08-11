@@ -16,8 +16,8 @@ namespace Game.Presenters
         public string Price => _planet.Price.ToString();
         public bool IsIncomeReady => _planet.IsIncomeReady;
         
-        private PlanetPopupPresentation _planetPopup;
-        private IPlanet _planet;
+        private readonly PlanetPopupPresentation _planetPopup;
+        private readonly IPlanet _planet;
         
         public PlanetPresentation(Planet planet, PlanetPopupPresentation planetPopup)
         {
@@ -62,10 +62,7 @@ namespace Game.Presenters
             }
         }
         
-        private void IncomeTimeChanged(float time)
-        {
-            this.OnIncomeTimeChanged?.Invoke(_planet.IncomeProgress, time);
-        }
+        private void IncomeTimeChanged(float time) => this.OnIncomeTimeChanged?.Invoke(_planet.IncomeProgress, time);
 
         private void IncomeReady(bool state) => this.OnIncomeReady?.Invoke(state);
         

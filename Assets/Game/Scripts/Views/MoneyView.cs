@@ -1,4 +1,3 @@
-using System;
 using Game.Presenters;
 using TMPro;
 using UnityEngine;
@@ -31,10 +30,7 @@ namespace Game.Views
             _presentation.OnUpdateView += UpdateView;
         }
 
-        private void OnDisable()
-        {
-            _presentation.OnUpdateView -= UpdateView;
-        }
+        private void OnDisable() => _presentation.OnUpdateView -= UpdateView;
 
         private void UpdateView(string value) => _currentMoneyText.text = value;
     }

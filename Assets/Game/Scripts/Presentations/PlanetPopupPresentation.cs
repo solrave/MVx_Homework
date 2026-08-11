@@ -2,7 +2,6 @@ using System;
 using Modules.Money;
 using Modules.Planets;
 using UnityEngine;
-using Zenject;
 
 namespace Game.Presenters
 {
@@ -22,7 +21,7 @@ namespace Game.Presenters
         public int MinuteIncome => _planet.MinuteIncome;
         public string Price => _planet.Price.ToString();
         public bool CanUpgrade => _planet.CanUnlockOrUpgrade;
-        public bool EnoughMoney => _moneyStorage.Money > _planet.Price;
+        private bool EnoughMoney => _moneyStorage.Money > _planet.Price;
         
         private IPlanet _planet;
         private readonly IMoneyStorage _moneyStorage;

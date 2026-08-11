@@ -9,20 +9,21 @@ using Game.Views;
 using Modules.Planets;
 
 public class PlanetView : MonoBehaviour, IPlanetView
-{
+{ 
     private const string FORMAT = @"mm\:ss";
-   [SerializeField] public string Name => _planetConfig.Name;
-   [SerializeField] private PlanetConfig _planetConfig;
+    public string Name => _planetConfig.Name;
+   
+    [SerializeField] private PlanetConfig _planetConfig;
     
-   [SerializeField] private Image _coin;
-   [SerializeField] private CanvasGroup _progressGroup;
-   [SerializeField] private CanvasGroup _priceGroup;
-   [SerializeField] private TMP_Text _progressTime;
-   [SerializeField] private Image _progressBar;
-   [SerializeField] private TMP_Text _price;
-   [SerializeField] private Image _planetIcon;
-   [SerializeField] private Image _planetLock;
-   [SerializeField] private SmartButton _button;
+    [SerializeField] private Image _coin;
+    [SerializeField] private CanvasGroup _progressGroup;
+    [SerializeField] private CanvasGroup _priceGroup;
+    [SerializeField] private TMP_Text _progressTime;
+    [SerializeField] private Image _progressBar;
+    [SerializeField] private TMP_Text _price;
+    [SerializeField] private Image _planetIcon;
+    [SerializeField] private Image _planetLock;
+    [SerializeField] private SmartButton _button;
     
     private PlanetPresentation _presentation;
     private ParticleAnimator _coinAnimator;
@@ -58,12 +59,11 @@ public class PlanetView : MonoBehaviour, IPlanetView
 
     private void OnDestroy()
     {
-        if (_presentation != null)
-        {
-            _presentation.OnUnlocked -= this.PlanetUnlocked;
-            _presentation.OnIncomeReady -= IncomeReady;
-            _presentation.OnIncomeTimeChanged -= this.IncomeTimeChanged;
-        }
+        if (_presentation == null) return;
+        
+        _presentation.OnUnlocked -= this.PlanetUnlocked;
+        _presentation.OnIncomeReady -= IncomeReady;
+        _presentation.OnIncomeTimeChanged -= this.IncomeTimeChanged;
     }
 
     private void ShowCoin() => _coin.enabled = true;
