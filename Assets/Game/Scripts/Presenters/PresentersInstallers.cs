@@ -29,11 +29,6 @@ namespace Game.Presenters
                 .FromComponentInHierarchy()
                 .AsSingle()
                 .NonLazy();
-            
-            this.Container.BindInterfacesAndSelfTo<ParticleAnimator>()
-                .FromComponentInHierarchy()
-                .AsSingle()
-                .NonLazy();
         }
     }
 }

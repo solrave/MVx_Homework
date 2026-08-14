@@ -40,13 +40,12 @@ namespace Game.Presenters
         public void Start()
         {
             _planetView.HideCoin();
-            _planetView.HideProgressBar();
+            _planetView.HideProgressGroup();
             _planet.OnIncomeReady += IncomeReady;
             _planetView.OnPlanetHold += this.PlanetHold;
             _planetView.OnPlanetClicked += this.PlanetClicked;
             _planet.OnUnlocked += this.PlanetUnlocked;
             _planet.OnIncomeTimeChanged += this.IncomeTimeChanged;
-            _planet.OnGathered += this.IncomeGathered;
         }
 
         public void OnDisable()
@@ -57,37 +56,47 @@ namespace Game.Presenters
             _planetView.OnPlanetClicked -= this.PlanetClicked;
             _planet.OnUnlocked -= this.PlanetUnlocked;
             _planet.OnIncomeTimeChanged -= this.IncomeTimeChanged;
-            _planet.OnGathered -= this.IncomeGathered;
         }
-        
+
         private void IncomeTimeChanged(float time)
         {
             _planetView.HideCoin();
-            _planetView.ShowProgressBar();
-            _planetView.SetProgressFill(_planet.IncomeProgress);
+            _planetView.ShowProgressGroup();
+            _planetView.SetProgressFill(1f - _planet.IncomeProgress);
             _planetView.SetProgressText($"{time: 00:00}");
         }
         
-        private void IncomeGathered(int count)
+        private void GatherIncome()
         {
             _planetView.HideCoin();
-            _planetView.ShowProgressBar();
+            if (_planet.IsUnlocked)
+                _planetView.ShowProgressGroup();
+            
+            _planet.GatherIncome();
         }
         
-        private void IncomeReady(bool obj)
+        private void IncomeReady(bool isReady)
         {
-            _planetView.HideProgressBar();
-            _planetView.ShowCoin(); 
+            if (isReady)
+            {
+                _planetView.HideProgressGroup();
+                _planetView.ShowCoin(); 
+            }
+            else
+            {
+                _planetView.ShowProgressGroup();
+                _planetView.HideCoin(); 
+            }
         }
         
         private void PlanetClicked()
         {
             if (_planet.CanUnlockOrUpgrade)
                 _planet.Unlock();
-            
+
             if (_planet.IsUnlocked && _planet.IsIncomeReady)
             {
-                _planet.GatherIncome();
+                _planetView.HideCoin();
                 AnimateIncome();
             }
         }
@@ -102,12 +111,13 @@ namespace Game.Presenters
         {
             _planetView.SetIcon(_planet.GetIcon(true));
             _planetView.HideLock();
+            _planetView.HidePriceGroup();
         }
         
         private void AnimateIncome()
         {
             _coinAnimator.Emit(_planetView.IncomeCoinPosition,
-                _moneyPresenter.IncomeCoinPosition);
+                _moneyPresenter.IncomeCoinPosition,1f, this.GatherIncome);
         }
     }
 }

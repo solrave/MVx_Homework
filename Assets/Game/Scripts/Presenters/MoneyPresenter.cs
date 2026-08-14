@@ -48,6 +48,10 @@ namespace Game.Presenters
         private void MoneyChanged(int newValue, int prevValue)
         { 
             _moneyView.UpdateView(newValue.ToString());
+            
+            if (_countCoroutine != null)
+                StopCoroutine(_countCoroutine);
+            
             _countCoroutine = StartCoroutine(CountCoinsCoroutine(prevValue, newValue));
             this.OnMoneyChanged?.Invoke();
         }

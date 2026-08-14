@@ -1,7 +1,6 @@
 using Game.Views;
 using Modules.Planets;
 using UnityEngine;
-using Zenject;
 
 namespace Game.Presenters
 {
@@ -11,14 +10,6 @@ namespace Game.Presenters
         private PlanetPopupView _planetPopupView;
         
         private IPlanet _planet;
-        private MoneyPresenter _moneyPresenter;
-        private bool IfEnoughMoney => _moneyPresenter.Money >= _planet.Price;
-
-        [Inject]
-        private void Construct(MoneyPresenter presenter)
-        {
-            _moneyPresenter = presenter;            
-        }
         
         public void Show(IPlanet planet)
         {
@@ -29,7 +20,6 @@ namespace Game.Presenters
             _planet.OnUpgraded += this.Upgraded;
             _planet.OnIncomeChanged += this.IncomeChanged;
             _planet.OnPopulationChanged += this.PopulationChanged;
-            _moneyPresenter.OnMoneyChanged += this.SetUpgradeButtonInteractable;
             UpdateView();
         }
 
@@ -40,7 +30,6 @@ namespace Game.Presenters
             _planet.OnUpgraded -= this.Upgraded;
             _planet.OnIncomeChanged -= this.IncomeChanged;
             _planet.OnPopulationChanged -= this.PopulationChanged;
-            _moneyPresenter.OnMoneyChanged -= this.SetUpgradeButtonInteractable;
             this.gameObject.SetActive(false);
             _planet = null;
         }
@@ -54,7 +43,7 @@ namespace Game.Presenters
             this.IncomeChanged(_planet.MinuteIncome);
             _planetPopupView.SetPrice($"Price: {_planet.Price}");
             _planetPopupView.SetUpgradeAllowed(_planet.CanUpgrade);
-            SetUpgradeButtonInteractable(IfEnoughMoney);
+            UpdateButton(_planet.CanUpgrade);
         }
 
         private void PopulationChanged(int num)
@@ -67,23 +56,17 @@ namespace Game.Presenters
             => _planetPopupView.SetLevel($"Level: {_planet.Level} / {_planet.MaxLevel}");
 
         private void CloseClicked() => this.Hide();
-
-        private void SetUpgradeButtonInteractable()
-        {
-            if (!_planet.IsMaxLevel)
-                SetUpgradeButtonInteractable(IfEnoughMoney);
-        }
-
+        
         private void UpgradeClicked()
         {
             if (_planet.IsMaxLevel)
                 return;
             
             _planet.Upgrade();
-            SetUpgradeButtonInteractable(IfEnoughMoney);
+            UpdateButton(_planet.CanUpgrade);
         }
 
-        private void SetUpgradeButtonInteractable(bool upgradeAllowed)
+        private void UpdateButton(bool upgradeAllowed)
         {
             _planetPopupView.SetUpgradeAllowed(upgradeAllowed);
             _planetPopupView.SetPrice(
