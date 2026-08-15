@@ -7,8 +7,8 @@ namespace Game.Presenters
 {
     public class PlanetPresentation : IInitializable, IDisposable
     {
-        public event Action OnIncomeGathered;
-        public event Action<Sprite> OnUnlocked;
+        public event Action<Action> OnIncomeGathered;
+        public event Action OnUnlocked;
         public event Action<bool> OnIncomeReady;
         public event Action<float, float> OnIncomeTimeChanged;
         
@@ -31,7 +31,7 @@ namespace Game.Presenters
             _planet.OnIncomeReady += IncomeReady;
             _planet.OnIncomeTimeChanged += this.IncomeTimeChanged;
         }
-        
+
         public void Dispose()
         {
             _planet.OnUnlocked -= this.PlanetUnlocked;
@@ -44,13 +44,11 @@ namespace Game.Presenters
             if (_planet.CanUnlockOrUpgrade)
             {
                 _planet.Unlock();
-                OnUnlocked?.Invoke(_planet.GetIcon(true));
             }
             
             if (_planet.IsUnlocked && _planet.IsIncomeReady)
             {
-                _planet.GatherIncome();
-                OnIncomeGathered?.Invoke();
+                this.OnIncomeGathered?.Invoke(GatherIncome);   
             }
         }
 
@@ -61,11 +59,13 @@ namespace Game.Presenters
                 _planetPopup.Show(_planet);
             }
         }
+
+        private void GatherIncome() => _planet.GatherIncome();
         
         private void IncomeTimeChanged(float time) => this.OnIncomeTimeChanged?.Invoke(_planet.IncomeProgress, time);
 
         private void IncomeReady(bool state) => this.OnIncomeReady?.Invoke(state);
         
-        private void PlanetUnlocked() => this.OnUnlocked?.Invoke(_planet.GetIcon(true));
+        private void PlanetUnlocked() => this.OnUnlocked?.Invoke();
     }
 }

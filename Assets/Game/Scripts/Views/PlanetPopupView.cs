@@ -18,6 +18,7 @@ namespace Game.Views
         [SerializeField] private Button _closeButton;
         
         private PlanetPopupPresentation _presentation;
+        private const string FULLY_UPGRADED = "Fully Upgraded";
         
         [Inject]
         public void Construct(PlanetPopupPresentation presentation)
@@ -41,7 +42,7 @@ namespace Game.Views
             _closeButton.onClick.AddListener(_presentation.CloseClicked);
             _upgradeButton.onClick.AddListener(_presentation.UpgradeClicked);
             _presentation.OnUpdateView += this.UpdateView;
-            _presentation.OnUpdateUpgradeButton += this.UpdateUpgradeButton;
+            _presentation.OnRefreshButton += this.RefreshButton;
             _presentation.OnCloseClicked += this.Hide;
             _presentation.OnUpgraded += this.SetLevel;
             _presentation.OnPopulationChanged += this.SetPopulation;
@@ -53,7 +54,7 @@ namespace Game.Views
             _closeButton.onClick.RemoveListener(_presentation.CloseClicked);
             _upgradeButton.onClick.RemoveListener(_presentation.UpgradeClicked);
             _presentation.OnUpdateView -= this.UpdateView;
-            _presentation.OnUpdateUpgradeButton -= this.UpdateUpgradeButton;
+            _presentation.OnRefreshButton -= this.RefreshButton;
             _presentation.OnCloseClicked -= this.Hide;
             _presentation.OnUpgraded -= this.SetLevel;
             _presentation.OnPopulationChanged -= this.SetPopulation;
@@ -65,17 +66,17 @@ namespace Game.Views
             Show();
             SetAvatar(_presentation.Icon);
             SetName(_presentation.Name);
-            SetPopulation(_presentation.Population.ToString());
-            SetLevel($"Level: {_presentation.Level} / {_presentation.MaxLevel}");
-            SetIncome($"Income: {_presentation.MinuteIncome}");
-            SetPrice($"Price: {_presentation.Price}");
-            SetUpgradeAllowed(_presentation.CanUpgrade);
+            SetPopulation(_presentation.Population);
+            SetLevel(_presentation.Level);
+            SetIncome(_presentation.Income);
+            SetPrice(_presentation.Price);
+            SetButtonInteractable(_presentation.CanUpgrade);
         }
         
-        private void UpdateUpgradeButton(bool allowed)
+        private void RefreshButton(bool isAllowed)
         {
-            SetPrice(!allowed ? "Fully Upgraded" : $"Price: {_presentation.Price}");
-            SetUpgradeAllowed(allowed);
+            SetPrice(_presentation.IsMaxLevel ? FULLY_UPGRADED : _presentation.Price);
+            SetButtonInteractable(isAllowed);
         }
         
         private void Hide() => this.gameObject.SetActive(false);
@@ -86,6 +87,6 @@ namespace Game.Views
         private void SetLevel(string level) => _level.text = level;
         private void SetIncome(string income) => _income.text = income;
         private void SetPrice(string price) => _price.text = price;
-        private void SetUpgradeAllowed(bool allowed) => _upgradeButton.interactable = allowed;
+        private void SetButtonInteractable(bool allowed) => _upgradeButton.interactable = allowed;
     }
 }

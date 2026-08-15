@@ -302,5 +302,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d885adcb123e44ca8d4d257b6be9ccde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Views::Game.Views.MoneyView
-  _currentMoneyText: {fileID: 3299675748291971791}
+  _money: {fileID: 3299675748291971791}
   _coinIcon: {fileID: 4603339340333858954}
+  _duration: 1

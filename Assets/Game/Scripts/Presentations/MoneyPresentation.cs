@@ -6,7 +6,7 @@ namespace Game.Presenters
 {
     public class MoneyPresentation : IInitializable, IDisposable
     {
-        public event Action<string> OnUpdateView;
+        public event Action<int, int> OnUpdateView;
         public string Money => _moneyStorage.Money.ToString();
         private readonly MoneyStorage _moneyStorage;
 
@@ -34,7 +34,7 @@ namespace Game.Presenters
 
         private void MoneyChanged(int newValue, int prevValue)
         {
-            OnUpdateView?.Invoke(newValue.ToString());
+            OnUpdateView?.Invoke(newValue, prevValue);
         }
     }
 }

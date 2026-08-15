@@ -16,11 +16,11 @@ public class PlanetView : MonoBehaviour, IPlanetView
     [SerializeField] private PlanetConfig _planetConfig;
     
     [SerializeField] private Image _coin;
-    [SerializeField] private CanvasGroup _progressGroup;
-    [SerializeField] private CanvasGroup _priceGroup;
+    [SerializeField] private GameObject _progressGroup;
+    [SerializeField] private GameObject _priceGroup;
     [SerializeField] private TMP_Text _progressTime;
     [SerializeField] private Image _progressBar;
-    [SerializeField] private TMP_Text _price;
+    [SerializeField] private TMP_Text _priceText;
     [SerializeField] private Image _planetIcon;
     [SerializeField] private Image _planetLock;
     [SerializeField] private SmartButton _button;
@@ -39,71 +39,74 @@ public class PlanetView : MonoBehaviour, IPlanetView
     public void Initialize(PlanetPresentation presentation)
     {
         _presentation = presentation;
-        HideCoin();
-        HideProgressBar();
-        SetPrice(_presentation.Price);
-        SetIcon(_presentation.Icon);
+        InitializeView();
         _button.OnHold += _presentation.PlanetHold;
         _button.OnClick += _presentation.PlanetClicked;
-        _presentation.OnIncomeGathered += this.AnimateIncomeGathering;
-        _presentation.OnUnlocked += this.PlanetUnlocked;
-        _presentation.OnIncomeReady += IncomeReady;
-        _presentation.OnIncomeTimeChanged += this.IncomeTimeChanged;
-    }
-
-    private void AnimateIncomeGathering()
-    {
-        _coinAnimator.Emit(_coin.rectTransform.position,
-            _moneyView.CoinPosition);
+        
+        _presentation.OnIncomeGathered += this.AnimateIncome;
+        _presentation.OnUnlocked += this.UnlockPlanet;
+        _presentation.OnIncomeReady += SetIncomeUI;
+        _presentation.OnIncomeTimeChanged += this.ShowProgressBar;
     }
 
     private void OnDestroy()
     {
         if (_presentation == null) return;
         
-        _presentation.OnUnlocked -= this.PlanetUnlocked;
-        _presentation.OnIncomeReady -= IncomeReady;
-        _presentation.OnIncomeTimeChanged -= this.IncomeTimeChanged;
+        _presentation.OnIncomeGathered -= this.AnimateIncome;
+        _presentation.OnUnlocked -= this.UnlockPlanet;
+        _presentation.OnIncomeReady -= SetIncomeUI;
+        _presentation.OnIncomeTimeChanged -= this.ShowProgressBar;
+    }
+    
+    private void InitializeView()
+    {
+        HideCoin();
+        HideProgressBar();
+        _priceText.text = _presentation.Price;
+        _planetIcon.sprite = _presentation.Icon;
     }
 
-    private void ShowCoin() => _coin.enabled = true;
-    private void HideCoin() => _coin.enabled = false;
-    private void SetProgressText(string text) => this._progressTime.SetText(text);
-    private void SetProgressFill(float value) => this._progressBar.fillAmount = value;
-    private void SetPrice(string text) => this._price.SetText(text);
-    private void SetIcon(Sprite icon) => this._planetIcon.sprite = icon;
-    private void HideLock() => _planetLock.gameObject.SetActive(false);
-    private void HideProgressBar() => _progressGroup.alpha = 0;
-    private void ShowProgressBar() => _progressGroup.alpha = 1;
-    private void HidePrice() => this._priceGroup.alpha = 0;
-    
-    private void IncomeTimeChanged(float incomeProgress, float remainingTime)
+    private void AnimateIncome(Action callback)
     {
-        if (_presentation.IsIncomeReady)
-        {
-            ShowCoin();
-            HideProgressBar();
-        }
-        
+        HideCoin();
+        _coinAnimator.Emit(_coin.rectTransform.position, 
+            _moneyView.CoinPosition, 1f, callback);
+    }
+    
+    private void ShowProgressBar(float incomeProgress, float remainingTime)
+    {
         var time = TimeSpan.FromSeconds(Mathf.CeilToInt(remainingTime));
         HideCoin();
         ShowProgressBar();
-        SetProgressFill(incomeProgress);
-        SetProgressText(time.ToString(FORMAT));
+        _progressBar.fillAmount = 1f - incomeProgress;
+        _progressTime.SetText(time.ToString(FORMAT));
     }
     
-    private void IncomeReady(bool obj)
+    private void SetIncomeUI(bool isReady)
     {
-        HideProgressBar();
-        ShowCoin(); 
+        if (isReady)
+        {
+            HideProgressBar();
+            ShowCoin(); 
+        }
+        else
+        {
+            ShowProgressBar();
+            HideCoin(); 
+        }
     }
 
-    private void PlanetUnlocked(Sprite icon)
+    private void UnlockPlanet()
     {
-        SetIcon(icon);
-        HideLock();
-        HidePrice();
+        _planetIcon.sprite = _presentation.Icon;
+        _planetLock.gameObject.SetActive(false);
+        _priceGroup.SetActive(false);
         ShowProgressBar();
-        ShowCoin();
     }
+    
+    private void ShowCoin() => _coin.enabled = true;
+    private void HideCoin() => _coin.enabled = false;
+    private void HideProgressBar() => _progressGroup.SetActive(false);
+    private void ShowProgressBar() => _progressGroup.SetActive(true);
 }

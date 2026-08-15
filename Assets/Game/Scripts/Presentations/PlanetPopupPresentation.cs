@@ -13,25 +13,20 @@ namespace Game.Presenters
         public event Action<string> OnUpgraded;
         public event Action<string> OnIncomeChanged;
         public event Action<string> OnPopulationChanged;
-        public event Action<bool> OnUpdateUpgradeButton;
+        public event Action<bool> OnRefreshButton;
         public event Action OnCloseClicked;
+        
         public string Name => _planet.Name;
         public Sprite Icon => _planet.GetIcon(_planet.IsUnlocked);
-        public int Population => _planet.Population;
-        public int Level => _planet.Level;
-        public int MaxLevel => _planet.MaxLevel;
-        public int MinuteIncome => _planet.MinuteIncome;
-        public string Price => _planet.Price.ToString();
+        public string Population => $"Population: {_planet.Population}";
+        public string Level => $"Level: {_planet.Level} / {_planet.MaxLevel}";
+        public string Income => $"Income: {_planet.MinuteIncome}";
+        public string Price => $"Price: {_planet.Price.ToString()}";
+        public bool IsMaxLevel => _planet.IsMaxLevel;
         public bool CanUpgrade => _planet.CanUnlockOrUpgrade;
-        private bool EnoughMoney => _moneyStorage.Money > _planet.Price;
-        
         private IPlanet _planet;
-        private readonly IMoneyStorage _moneyStorage;
 
-        public PlanetPopupPresentation(IMoneyStorage moneyStorage)
-        {
-            _moneyStorage = moneyStorage;
-        }
+        
 
         public void Show(IPlanet planet)
         {
@@ -39,7 +34,6 @@ namespace Game.Presenters
             _planet.OnUpgraded += this.Upgraded;
             _planet.OnPopulationChanged += this.PopulationChanged;
             _planet.OnIncomeChanged += this.IncomeChanged;
-            _moneyStorage.OnMoneyChanged += this.OnMoneyChanged;
             OnUpdateView?.Invoke();
         }
 
@@ -48,7 +42,6 @@ namespace Game.Presenters
             _planet.OnUpgraded -= this.Upgraded;
             _planet.OnPopulationChanged -= this.PopulationChanged;
             _planet.OnIncomeChanged -= this.IncomeChanged;
-            _moneyStorage.OnMoneyChanged -= this.OnMoneyChanged;
             _planet = null;
         }
         
@@ -60,26 +53,16 @@ namespace Game.Presenters
 
         public void UpgradeClicked()
         {
-            if (_moneyStorage.Money > _planet.Price)
-            {
-                _planet.Upgrade();
-                OnUpdateUpgradeButton?.Invoke(true);
-            }
-
-            if (_planet.IsMaxLevel)
-                OnUpdateUpgradeButton?.Invoke(false);
+            if (!_planet.CanUpgrade) return;
             
+            _planet.Upgrade();
+            OnRefreshButton?.Invoke(_planet.CanUpgrade);
         }
 
-        private void OnMoneyChanged(int newValue, int prevValue)
-        {
-            this.OnUpdateUpgradeButton?.Invoke(EnoughMoney);
-        }
+        private void PopulationChanged(int num) => this.OnPopulationChanged?.Invoke(Population);
 
-        private void PopulationChanged(int num) => this.OnPopulationChanged?.Invoke(num.ToString());
+        private void IncomeChanged(int income) => this.OnIncomeChanged?.Invoke(Income);
 
-        private void IncomeChanged(int income) => this.OnIncomeChanged?.Invoke(income.ToString());
-
-        private void Upgraded(int level) => this.OnUpgraded?.Invoke($"{level} / {_planet.MaxLevel}");
+        private void Upgraded(int level) => this.OnUpgraded?.Invoke(Level);
     }
 }
