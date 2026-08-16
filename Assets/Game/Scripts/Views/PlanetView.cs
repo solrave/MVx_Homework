@@ -11,7 +11,6 @@ using R3;
 
 public class PlanetView : MonoBehaviour, IPlanetView
 { 
-    private const string FORMAT = @"mm\:ss";
     public string Name => _planetConfig.Name;
    
     [SerializeField] private PlanetConfig _planetConfig;
@@ -63,12 +62,6 @@ public class PlanetView : MonoBehaviour, IPlanetView
         _presentation.OnIncomeAnimation -= this.AnimateIncome;
         _disposableBag.Dispose();
     }
-    
-    private void InitializeView()
-    {
-        HideCoin();
-        HideProgressBar();
-    }
 
     private void AnimateIncome(Action callback)
     {
@@ -82,9 +75,8 @@ public class PlanetView : MonoBehaviour, IPlanetView
         if (!_presentation.IsUnlocked.CurrentValue) return; 
         
         ShowProgressBar();
-        //var time = TimeSpan.FromSeconds(Mathf.CeilToInt(incomeProgress));
         _progressBar.fillAmount = 1f - incomeProgress;
-        _progressTime.SetText(incomeProgress.ToString(FORMAT));
+        _progressTime.SetText($"{_presentation.RemainingTime.CurrentValue: 00:00}");
     }
     
     private void SetIncomeUI(bool isReady)

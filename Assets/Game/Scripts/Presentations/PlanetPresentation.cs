@@ -16,7 +16,9 @@ namespace Game.Presenters
         public ReadOnlyReactiveProperty<bool> IsIncomeReady => _isIncomeReady;
         public ReadOnlyReactiveProperty<bool> IsUnlocked => _isUnlocked;
         public ReadOnlyReactiveProperty<float> IncomeProgress => _incomeProgress;
+        public ReadOnlyReactiveProperty<float> RemainingTime => _remainingTime;
         
+        private readonly ReactiveProperty<float> _remainingTime = new();
         private readonly ReactiveProperty<Sprite> _icon = new();
         private readonly ReactiveProperty<string> _price = new();
         private readonly ReactiveProperty<bool> _isIncomeReady = new();
@@ -37,13 +39,13 @@ namespace Game.Presenters
             _icon.Value = _planet.GetIcon(_planet.IsUnlocked);
             _isUnlocked.Value = _planet.IsUnlocked;
             _price.Value = _planet.Price.ToString();
-            _planet.OnIncomeChanged += this.IncomeTimeChanged;
+            _planet.OnIncomeTimeChanged += this.IncomeTimeChanged;
             _planet.OnIncomeReady += this.IncomeReady;
         }
         
         public void Dispose()
         {
-            _planet.OnIncomeChanged -= this.IncomeTimeChanged;
+            _planet.OnIncomeTimeChanged -= this.IncomeTimeChanged;
             _planet.OnIncomeReady -= this.IncomeReady;
         }
         
@@ -81,7 +83,10 @@ namespace Game.Presenters
         
         private void IncomeReady(bool obj) => _isIncomeReady.Value = _planet.IsIncomeReady;
 
-        private void IncomeTimeChanged(int remainingTime) => _incomeProgress.Value = _planet.IncomeProgress;
-
+        private void IncomeTimeChanged(float remainingTime)
+        {
+            _incomeProgress.Value = _planet.IncomeProgress;
+            _remainingTime.Value = remainingTime;
+        }
     }
 }

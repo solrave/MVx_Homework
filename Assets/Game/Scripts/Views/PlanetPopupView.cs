@@ -30,11 +30,6 @@ namespace Game.Views
             Subscribe();
         }
 
-        private void Awake()
-        {
-            UpdateView();
-        }
-
         private void OnDestroy()
         {
             Unsubscribe();
@@ -42,31 +37,9 @@ namespace Game.Views
         }
         
         private void Subscribe()
-        {
+        {            
             _closeButton.onClick.AddListener(_presentation.CloseClicked);
             _upgradeButton.onClick.AddListener(_presentation.UpgradeClicked);
-            // _presentation.OnUpdateView += this.UpdateView;
-            // _presentation.OnRefreshButton += this.RefreshButton;
-            // _presentation.OnCloseClicked += this.Hide;
-            // _presentation.OnUpgraded += this.SetLevel;
-            // _presentation.OnPopulationChanged += this.SetPopulation;
-            // _presentation.OnIncomeChanged += this.SetIncome;
-        }
-
-        private void Unsubscribe()
-        {
-            _closeButton.onClick.RemoveListener(_presentation.CloseClicked);
-            _upgradeButton.onClick.RemoveListener(_presentation.UpgradeClicked);
-            // _presentation.OnUpdateView -= this.UpdateView;
-            // _presentation.OnRefreshButton -= this.RefreshButton;
-            // _presentation.OnCloseClicked -= this.Hide;
-            // _presentation.OnUpgraded -= this.SetLevel;
-            // _presentation.OnPopulationChanged -= this.SetPopulation;
-            // _presentation.OnIncomeChanged -= this.SetIncome;
-        }
-
-        private void UpdateView()
-        {
             _presentation.Icon.Subscribe(SetAvatar).AddTo(ref _disposableBag);
             _presentation.Name.Subscribe(SetName).AddTo(ref _disposableBag);
             _presentation.Population.Subscribe(SetPopulation).AddTo(ref _disposableBag);
@@ -75,25 +48,29 @@ namespace Game.Views
             _presentation.Price.Subscribe(SetPrice).AddTo(ref _disposableBag);
             _presentation.CanUpgrade.Subscribe(RefreshButton).AddTo(ref _disposableBag);
             _presentation.IsVisible.Subscribe(SetVisible).AddTo(ref _disposableBag);
-            // SetAvatar(_presentation.Icon);
-            // SetName(_presentation.Name);
-            // SetPopulation(_presentation.Population);
-            // SetLevel(_presentation.Level);
-            // SetIncome(_presentation.Income);
-            // SetPrice(_presentation.Price);
-            // SetButtonInteractable(_presentation.CanUpgrade);
+        }
+
+        private void Unsubscribe()
+        {
+            _closeButton.onClick.RemoveListener(_presentation.CloseClicked);
+            _upgradeButton.onClick.RemoveListener(_presentation.UpgradeClicked);
+            _disposableBag.Dispose();
         }
         
         private void RefreshButton(bool canUpgrade)
         {
-            // if (!canUpgrade)
-            //     SetPrice(FULLY_UPGRADED);
-            // else
-            //     SetPrice(_presentation.Price);
-            SetButtonInteractable(canUpgrade);
+            if (_presentation.IsMaxLevel.CurrentValue)
+            {
+                SetPrice(FULLY_UPGRADED);
+                SetButtonInteractable(false);
+            }
+            else
+            {
+                SetPrice(_presentation.Price.CurrentValue);
+                SetButtonInteractable(canUpgrade);
+            }
         }
         
-        private void Hide() => this.gameObject.SetActive(false);
         private void SetVisible(bool state) => this.gameObject.SetActive(state);
         private void SetAvatar(Sprite icon) => _avatar.sprite = icon;
         private void SetName(string planetName) => _name.text = planetName;
