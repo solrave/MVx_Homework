@@ -829,17 +829,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &567389698 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3299675748291971791, guid: 922a3fcd633baa0498344270e9eabd2a, type: 3}
-  m_PrefabInstance: {fileID: 6121086404576301247}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &615309290
 GameObject:
   m_ObjectHideFlags: 0
@@ -2586,10 +2575,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: MoneyView
       objectReference: {fileID: 0}
-    - target: {fileID: 7553705761287196193, guid: 922a3fcd633baa0498344270e9eabd2a, type: 3}
-      propertyPath: _money
-      value: 
-      objectReference: {fileID: 567389698}
     - target: {fileID: 8460962601618271506, guid: 922a3fcd633baa0498344270e9eabd2a, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2670,9 +2655,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7832056747382589570, guid: 922a3fcd633baa0498344270e9eabd2a, type: 3}
-    - {fileID: 7226052269953746544, guid: 922a3fcd633baa0498344270e9eabd2a, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

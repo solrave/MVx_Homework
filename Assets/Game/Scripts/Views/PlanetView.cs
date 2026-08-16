@@ -7,6 +7,7 @@ using Zenject;
 using Game.Presenters;
 using Game.Views;
 using Modules.Planets;
+using R3;
 
 public class PlanetView : MonoBehaviour, IPlanetView
 { 
@@ -24,10 +25,13 @@ public class PlanetView : MonoBehaviour, IPlanetView
     [SerializeField] private Image _planetIcon;
     [SerializeField] private Image _planetLock;
     [SerializeField] private SmartButton _button;
+    [SerializeField] private float _duration = 1f;
     
     private PlanetPresentation _presentation;
     private ParticleAnimator _coinAnimator;
     private MoneyView _moneyView;
+    
+    private DisposableBag _disposableBag;
 
     [Inject]
     public void Construct(ParticleAnimator coinAnimator, MoneyView moneyView)
@@ -39,32 +43,31 @@ public class PlanetView : MonoBehaviour, IPlanetView
     public void Initialize(PlanetPresentation presentation)
     {
         _presentation = presentation;
-        InitializeView();
+        
         _button.OnHold += _presentation.PlanetHold;
         _button.OnClick += _presentation.PlanetClicked;
         
-        _presentation.OnIncomeGathered += this.AnimateIncome;
-        _presentation.OnUnlocked += this.UnlockPlanet;
-        _presentation.OnIncomeReady += SetIncomeUI;
-        _presentation.OnIncomeTimeChanged += this.ShowProgressBar;
+        _presentation.OnIncomeAnimation += this.AnimateIncome;
+        
+        _presentation.Price.Subscribe(SetPriceText).AddTo(ref _disposableBag);
+        _presentation.Icon.Subscribe(SetIcon).AddTo(ref _disposableBag);
+        _presentation.IsUnlocked.Subscribe(SetLockedState).AddTo(ref _disposableBag);
+        _presentation.IsIncomeReady.Subscribe(SetIncomeUI).AddTo(ref _disposableBag);
+        _presentation.IncomeProgress.Subscribe(FillProgress).AddTo(ref _disposableBag);
     }
 
     private void OnDestroy()
     {
         if (_presentation == null) return;
         
-        _presentation.OnIncomeGathered -= this.AnimateIncome;
-        _presentation.OnUnlocked -= this.UnlockPlanet;
-        _presentation.OnIncomeReady -= SetIncomeUI;
-        _presentation.OnIncomeTimeChanged -= this.ShowProgressBar;
+        _presentation.OnIncomeAnimation -= this.AnimateIncome;
+        _disposableBag.Dispose();
     }
     
     private void InitializeView()
     {
         HideCoin();
         HideProgressBar();
-        _priceText.text = _presentation.Price;
-        _planetIcon.sprite = _presentation.Icon;
     }
 
     private void AnimateIncome(Action callback)
@@ -74,17 +77,20 @@ public class PlanetView : MonoBehaviour, IPlanetView
             _moneyView.CoinPosition, 1f, callback);
     }
     
-    private void ShowProgressBar(float incomeProgress, float remainingTime)
+    private void FillProgress(float incomeProgress)
     {
-        var time = TimeSpan.FromSeconds(Mathf.CeilToInt(remainingTime));
-        HideCoin();
+        if (!_presentation.IsUnlocked.CurrentValue) return; 
+        
         ShowProgressBar();
+        //var time = TimeSpan.FromSeconds(Mathf.CeilToInt(incomeProgress));
         _progressBar.fillAmount = 1f - incomeProgress;
-        _progressTime.SetText(time.ToString(FORMAT));
+        _progressTime.SetText(incomeProgress.ToString(FORMAT));
     }
     
     private void SetIncomeUI(bool isReady)
     {
+        if (!_presentation.IsUnlocked.CurrentValue) return; 
+        
         if (isReady)
         {
             HideProgressBar();
@@ -97,16 +103,30 @@ public class PlanetView : MonoBehaviour, IPlanetView
         }
     }
 
-    private void UnlockPlanet()
+    private void SetLockedState(bool unlocked)
     {
-        _planetIcon.sprite = _presentation.Icon;
-        _planetLock.gameObject.SetActive(false);
-        _priceGroup.SetActive(false);
-        ShowProgressBar();
+        if (!unlocked)
+        {
+            ShowLock();
+            ShowPrice();
+            HideProgressBar();
+            HideCoin();
+        }
+        else
+        {
+            HideLock();
+            HidePrice();
+        }
     }
     
+    private void SetPriceText(string text) => _priceText.text = text;
+    private void SetIcon(Sprite icon) => _planetIcon.sprite = icon;
     private void ShowCoin() => _coin.enabled = true;
     private void HideCoin() => _coin.enabled = false;
     private void HideProgressBar() => _progressGroup.SetActive(false);
     private void ShowProgressBar() => _progressGroup.SetActive(true);
+    private void ShowLock() => _planetLock.gameObject.SetActive(true);
+    private void HideLock() => _planetLock.gameObject.SetActive(false);
+    private void ShowPrice() => _priceGroup.gameObject.SetActive(true);
+    private void HidePrice() => _priceGroup.gameObject.SetActive(false);
 }

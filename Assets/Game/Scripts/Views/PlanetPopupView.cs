@@ -1,4 +1,5 @@
 using Game.Presenters;
+using R3;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ namespace Game.Views
 {
     public class PlanetPopupView : MonoBehaviour
     {
+        private const string FULLY_UPGRADED = "Fully Upgraded";
         [SerializeField] private Image _avatar;
         [SerializeField] private TMP_Text _name;
         [SerializeField] private TMP_Text _population;
@@ -17,8 +19,9 @@ namespace Game.Views
         [SerializeField] private Button _upgradeButton;
         [SerializeField] private Button _closeButton;
         
+        private DisposableBag _disposableBag = new();
+        
         private PlanetPopupPresentation _presentation;
-        private const string FULLY_UPGRADED = "Fully Upgraded";
         
         [Inject]
         public void Construct(PlanetPopupPresentation presentation)
@@ -35,52 +38,63 @@ namespace Game.Views
         private void OnDestroy()
         {
             Unsubscribe();
+            _disposableBag.Dispose();
         }
         
         private void Subscribe()
         {
             _closeButton.onClick.AddListener(_presentation.CloseClicked);
             _upgradeButton.onClick.AddListener(_presentation.UpgradeClicked);
-            _presentation.OnUpdateView += this.UpdateView;
-            _presentation.OnRefreshButton += this.RefreshButton;
-            _presentation.OnCloseClicked += this.Hide;
-            _presentation.OnUpgraded += this.SetLevel;
-            _presentation.OnPopulationChanged += this.SetPopulation;
-            _presentation.OnIncomeChanged += this.SetIncome;
+            // _presentation.OnUpdateView += this.UpdateView;
+            // _presentation.OnRefreshButton += this.RefreshButton;
+            // _presentation.OnCloseClicked += this.Hide;
+            // _presentation.OnUpgraded += this.SetLevel;
+            // _presentation.OnPopulationChanged += this.SetPopulation;
+            // _presentation.OnIncomeChanged += this.SetIncome;
         }
 
         private void Unsubscribe()
         {
             _closeButton.onClick.RemoveListener(_presentation.CloseClicked);
             _upgradeButton.onClick.RemoveListener(_presentation.UpgradeClicked);
-            _presentation.OnUpdateView -= this.UpdateView;
-            _presentation.OnRefreshButton -= this.RefreshButton;
-            _presentation.OnCloseClicked -= this.Hide;
-            _presentation.OnUpgraded -= this.SetLevel;
-            _presentation.OnPopulationChanged -= this.SetPopulation;
-            _presentation.OnIncomeChanged -= this.SetIncome;
+            // _presentation.OnUpdateView -= this.UpdateView;
+            // _presentation.OnRefreshButton -= this.RefreshButton;
+            // _presentation.OnCloseClicked -= this.Hide;
+            // _presentation.OnUpgraded -= this.SetLevel;
+            // _presentation.OnPopulationChanged -= this.SetPopulation;
+            // _presentation.OnIncomeChanged -= this.SetIncome;
         }
 
         private void UpdateView()
         {
-            Show();
-            SetAvatar(_presentation.Icon);
-            SetName(_presentation.Name);
-            SetPopulation(_presentation.Population);
-            SetLevel(_presentation.Level);
-            SetIncome(_presentation.Income);
-            SetPrice(_presentation.Price);
-            SetButtonInteractable(_presentation.CanUpgrade);
+            _presentation.Icon.Subscribe(SetAvatar).AddTo(ref _disposableBag);
+            _presentation.Name.Subscribe(SetName).AddTo(ref _disposableBag);
+            _presentation.Population.Subscribe(SetPopulation).AddTo(ref _disposableBag);
+            _presentation.Level.Subscribe(SetLevel).AddTo(ref _disposableBag);
+            _presentation.Income.Subscribe(SetIncome).AddTo(ref _disposableBag);
+            _presentation.Price.Subscribe(SetPrice).AddTo(ref _disposableBag);
+            _presentation.CanUpgrade.Subscribe(RefreshButton).AddTo(ref _disposableBag);
+            _presentation.IsVisible.Subscribe(SetVisible).AddTo(ref _disposableBag);
+            // SetAvatar(_presentation.Icon);
+            // SetName(_presentation.Name);
+            // SetPopulation(_presentation.Population);
+            // SetLevel(_presentation.Level);
+            // SetIncome(_presentation.Income);
+            // SetPrice(_presentation.Price);
+            // SetButtonInteractable(_presentation.CanUpgrade);
         }
         
-        private void RefreshButton(bool isAllowed)
+        private void RefreshButton(bool canUpgrade)
         {
-            SetPrice(_presentation.IsMaxLevel ? FULLY_UPGRADED : _presentation.Price);
-            SetButtonInteractable(isAllowed);
+            // if (!canUpgrade)
+            //     SetPrice(FULLY_UPGRADED);
+            // else
+            //     SetPrice(_presentation.Price);
+            SetButtonInteractable(canUpgrade);
         }
         
         private void Hide() => this.gameObject.SetActive(false);
-        private void Show() => this.gameObject.SetActive(true);
+        private void SetVisible(bool state) => this.gameObject.SetActive(state);
         private void SetAvatar(Sprite icon) => _avatar.sprite = icon;
         private void SetName(string planetName) => _name.text = planetName;
         private void SetPopulation(string populationCount) => _population.text = populationCount;

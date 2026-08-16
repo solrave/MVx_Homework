@@ -16,10 +16,6 @@ namespace Game.Views
                 .FromComponentInHierarchy()
                 .AsSingle();
             
-            this.Container.BindInterfacesAndSelfTo<Countdown>()
-                .AsSingle()
-                .NonLazy();
-            
             this.Container.BindInterfacesAndSelfTo<ParticleAnimator>()
                 .FromComponentInHierarchy()
                 .AsSingle()
