@@ -8,9 +8,9 @@ namespace Game.Presenters
 {
     public class PlanetPresentation : IInitializable, IDisposable
     {
-        public event Action<Action> OnIncomeAnimation;
-        
+        public event Action OnIncomeAnimation;
 
+        public string Name => _planet.Name;
         public ReadOnlyReactiveProperty<Sprite> Icon => _icon;
         public ReadOnlyReactiveProperty<string> Price => _price;
         public ReadOnlyReactiveProperty<bool> IsIncomeReady => _isIncomeReady;
@@ -27,6 +27,7 @@ namespace Game.Presenters
         
         private readonly PlanetPopupPresentation _planetPopup;
         private readonly IPlanet _planet;
+        private bool _animated;
         
         public PlanetPresentation(Planet planet, PlanetPopupPresentation planetPopup)
         {
@@ -60,9 +61,10 @@ namespace Game.Presenters
                 _incomeProgress.Value = _planet.IncomeProgress;
             }
             
-            if (_planet.IsUnlocked && _planet.IsIncomeReady)
+            if (_planet.IsUnlocked && _planet.IsIncomeReady && !_animated)
             {
-                this.OnIncomeAnimation?.Invoke(GatherIncome);   
+                this.OnIncomeAnimation?.Invoke();
+                _animated = true;
             }
         }
 
@@ -74,11 +76,12 @@ namespace Game.Presenters
             }
         }
 
-        private void GatherIncome()
+        public void GatherIncome()
         {
             _planet.GatherIncome();
             _incomeProgress.Value = _planet.IncomeProgress;
             _isIncomeReady.Value = _planet.IsIncomeReady;
+            _animated = false;
         }
         
         private void IncomeReady(bool obj) => _isIncomeReady.Value = _planet.IsIncomeReady;

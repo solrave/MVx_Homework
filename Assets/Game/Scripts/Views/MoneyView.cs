@@ -16,10 +16,7 @@ namespace Game.Views
 
         [SerializeField]
         private Image _coinIcon;
-
-        [SerializeField] 
-        private float _duration = 1f;
-
+        
         private int _currentDisplayedCoins;
         private Coroutine _coroutine;
         private MoneyPresentation _presentation;
@@ -33,35 +30,11 @@ namespace Game.Views
         private void OnEnable()
         {
             _money.text = _presentation.Money;
-            _presentation.OnUpdateView += UpdateView;
+            _presentation.OnUpdateMoneyCount += UpdateMoneyView;
         }
 
-        private void OnDisable() => _presentation.OnUpdateView -= UpdateView;
+        private void UpdateMoneyView(string money) => _money.text = money;
 
-        private void UpdateView(int newValue, int prevValue)
-        {
-            if (_coroutine != null)
-                StopCoroutine(_coroutine);
-            
-            StartCoroutine(IncomeAnimation(prevValue, newValue));
-        }
-        
-        private IEnumerator IncomeAnimation(int startValue, int targetValue)  
-        {  
-            float elapsed = 0f;  
-  
-            while (elapsed < _duration)  
-            {       
-                elapsed += Time.deltaTime;  
-                float progress = elapsed / _duration;  
-                _currentDisplayedCoins = (int)Mathf.Lerp(startValue, targetValue, progress);  
-                _money.text = _currentDisplayedCoins.ToString();  
-                yield return null;  
-            }   
-            
-            _currentDisplayedCoins = targetValue;  
-            _money.text = _currentDisplayedCoins.ToString();  
-            _coroutine = null;  
-        }
+        private void OnDisable() => _presentation.OnUpdateMoneyCount -= UpdateMoneyView;
     }
 }

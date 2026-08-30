@@ -1,40 +1,56 @@
 using System;
 using Modules.Money;
+using UnityEngine;
 using Zenject;
 
 namespace Game.Presenters
 {
-    public class MoneyPresentation : IInitializable, IDisposable
+    public class MoneyPresentation : IInitializable, IDisposable, ITickable
     {
-        public event Action<int, int> OnUpdateView;
+        public event Action<string> OnUpdateMoneyCount;
         public string Money => _moneyStorage.Money.ToString();
         private readonly MoneyStorage _moneyStorage;
+        private readonly float _duration = 1f;
+        private int _currentDisplayedCoins;
+        private bool _animationRequested;
+        private int _currentMoney;
+        private int _newMoney;
+        private float _elapsed;
+        private float _progress;
 
         public MoneyPresentation(MoneyStorage moneyStorage)
         {
             _moneyStorage = moneyStorage;
         }
 
-        public void Initialize()
+        public void Initialize() => _moneyStorage.OnMoneyChanged += this.ChangeMoney;
+
+        public void Dispose() => _moneyStorage.OnMoneyChanged -= this.ChangeMoney;
+
+        private void ChangeMoney(int newValue, int lastValue)
         {
-            _moneyStorage.OnMoneyChanged += this.MoneyChanged;
-            _moneyStorage.OnMoneySpent += this.MoneySpent;
+            _currentMoney = lastValue;
+            _newMoney = newValue;
+            _animationRequested = true;
+            _elapsed = 0f;
         }
 
-        public void Dispose()
+        public void Tick()
         {
-            _moneyStorage.OnMoneyChanged -= this.MoneyChanged;
-            _moneyStorage.OnMoneySpent -= this.MoneySpent;
-        }
+            if (!_animationRequested) return;
+            
+            _elapsed += Time.deltaTime;  
+            _progress = _elapsed / _duration;  
+            _currentDisplayedCoins = (int)Mathf.Lerp(_currentMoney, _newMoney, _progress);  
+            OnUpdateMoneyCount?.Invoke(_currentDisplayedCoins.ToString());
 
-        private void MoneySpent(int newValue, int range)
-        {
-           //Money Animation
-        }
-
-        private void MoneyChanged(int newValue, int prevValue)
-        {
-            OnUpdateView?.Invoke(newValue, prevValue);
+            if (_progress >= 1f)
+            {
+                _currentDisplayedCoins = _newMoney;  
+                OnUpdateMoneyCount?.Invoke(_currentDisplayedCoins.ToString());
+                _newMoney = 0;
+                _animationRequested = false;
+            }
         }
     }
 }

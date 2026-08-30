@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Modules.UI;
@@ -6,15 +5,10 @@ using TMPro;
 using Zenject;
 using Game.Presenters;
 using Game.Views;
-using Modules.Planets;
 using R3;
 
-public class PlanetView : MonoBehaviour, IPlanetView
+public class PlanetView : MonoBehaviour
 { 
-    public string Name => _planetConfig.Name;
-   
-    [SerializeField] private PlanetConfig _planetConfig;
-    
     [SerializeField] private Image _coin;
     [SerializeField] private GameObject _progressGroup;
     [SerializeField] private GameObject _priceGroup;
@@ -24,8 +18,7 @@ public class PlanetView : MonoBehaviour, IPlanetView
     [SerializeField] private Image _planetIcon;
     [SerializeField] private Image _planetLock;
     [SerializeField] private SmartButton _button;
-    [SerializeField] private float _duration = 1f;
-    
+
     private PlanetPresentation _presentation;
     private ParticleAnimator _coinAnimator;
     private MoneyView _moneyView;
@@ -42,7 +35,6 @@ public class PlanetView : MonoBehaviour, IPlanetView
     public void Initialize(PlanetPresentation presentation)
     {
         _presentation = presentation;
-        
         _button.OnHold += _presentation.PlanetHold;
         _button.OnClick += _presentation.PlanetClicked;
         
@@ -63,11 +55,11 @@ public class PlanetView : MonoBehaviour, IPlanetView
         _disposableBag.Dispose();
     }
 
-    private void AnimateIncome(Action callback)
+    private void AnimateIncome()
     {
         HideCoin();
         _coinAnimator.Emit(_coin.rectTransform.position, 
-            _moneyView.CoinPosition, 1f, callback);
+            _moneyView.CoinPosition, 1f, _presentation.GatherIncome);
     }
     
     private void FillProgress(float incomeProgress)

@@ -7,7 +7,7 @@ namespace Game.Presenters
 {
     public class PlanetPopupPresentation
     {
-        public event Action OnShow;
+        public string FullyUpgraded => "Fully Upgraded";
         public ReadOnlyReactiveProperty<Sprite> Icon => _icon;
         public ReadOnlyReactiveProperty<string> Name => _name;
         public ReadOnlyReactiveProperty<string> Population => _population;
@@ -43,7 +43,6 @@ namespace Game.Presenters
             _isMaxLevel.Value = _planet.IsMaxLevel;
             _canUpgrade.Value = _planet.CanUnlockOrUpgrade;
             _isVisible.Value = true;
-            OnShow?.Invoke();
         }
 
         private void OnUpgraded(int obj)

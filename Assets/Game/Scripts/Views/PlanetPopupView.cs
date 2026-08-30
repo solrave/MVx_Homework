@@ -9,7 +9,6 @@ namespace Game.Views
 {
     public class PlanetPopupView : MonoBehaviour
     {
-        private const string FULLY_UPGRADED = "Fully Upgraded";
         [SerializeField] private Image _avatar;
         [SerializeField] private TMP_Text _name;
         [SerializeField] private TMP_Text _population;
@@ -19,7 +18,7 @@ namespace Game.Views
         [SerializeField] private Button _upgradeButton;
         [SerializeField] private Button _closeButton;
         
-        private DisposableBag _disposableBag = new();
+        private DisposableBag _disposableBag;
         
         private PlanetPopupPresentation _presentation;
         
@@ -61,7 +60,7 @@ namespace Game.Views
         {
             if (_presentation.IsMaxLevel.CurrentValue)
             {
-                SetPrice(FULLY_UPGRADED);
+                SetPrice(_presentation.FullyUpgraded);
                 SetButtonInteractable(false);
             }
             else

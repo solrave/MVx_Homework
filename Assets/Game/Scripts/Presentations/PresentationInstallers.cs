@@ -17,7 +17,7 @@ namespace Game.Presenters
             this.Container.BindInterfacesAndSelfTo<MoneyPresentation>()
                 .AsSingle();
             
-            this.Container.BindInterfacesAndSelfTo<PlanetCatalogPresentation>()
+            this.Container.BindInterfacesAndSelfTo<PlanetPresentationCatalog>()
                 .AsSingle()
                 .NonLazy();
         }

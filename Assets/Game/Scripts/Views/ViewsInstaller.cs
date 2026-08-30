@@ -1,5 +1,4 @@
 using Modules.UI;
-using Modules.Utils;
 using Zenject;
 
 namespace Game.Views
@@ -23,6 +22,10 @@ namespace Game.Views
             
             this.Container.BindInterfacesAndSelfTo<MoneyView>()
                 .FromComponentInHierarchy()
+                .AsSingle()
+                .NonLazy();
+            
+            this.Container.BindInterfacesAndSelfTo<PlanetViewCatalog>()
                 .AsSingle()
                 .NonLazy();
         }
