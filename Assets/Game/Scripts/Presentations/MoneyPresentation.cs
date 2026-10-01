@@ -1,5 +1,6 @@
 using System;
 using Modules.Money;
+using R3;
 using UnityEngine;
 using Zenject;
 
@@ -7,7 +8,7 @@ namespace Game.Presenters
 {
     public class MoneyPresentation : IInitializable, IDisposable, ITickable
     {
-        public event Action<string> OnUpdateMoneyCount;
+        public ReactiveCommand<string> OnUpdateMoneyCount = new();
         public string Money => _moneyStorage.Money.ToString();
         private readonly MoneyStorage _moneyStorage;
         private readonly float _duration = 1f;
@@ -37,17 +38,22 @@ namespace Game.Presenters
 
         public void Tick()
         {
+            this.ProcessCountAnimation();
+        }
+
+        private void ProcessCountAnimation()
+        {
             if (!_animationRequested) return;
             
             _elapsed += Time.deltaTime;  
             _progress = _elapsed / _duration;  
             _currentDisplayedCoins = (int)Mathf.Lerp(_currentMoney, _newMoney, _progress);  
-            OnUpdateMoneyCount?.Invoke(_currentDisplayedCoins.ToString());
+            OnUpdateMoneyCount?.Execute(_currentDisplayedCoins.ToString());
 
             if (_progress >= 1f)
             {
                 _currentDisplayedCoins = _newMoney;  
-                OnUpdateMoneyCount?.Invoke(_currentDisplayedCoins.ToString());
+                OnUpdateMoneyCount?.Execute(_currentDisplayedCoins.ToString());
                 _newMoney = 0;
                 _animationRequested = false;
             }

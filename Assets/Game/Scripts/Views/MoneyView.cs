@@ -1,5 +1,5 @@
-using System.Collections;
 using Game.Presenters;
+using R3;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +20,7 @@ namespace Game.Views
         private int _currentDisplayedCoins;
         private Coroutine _coroutine;
         private MoneyPresentation _presentation;
+        private DisposableBag _disposableBag;
 
         [Inject]
         public void Construct(MoneyPresentation presentation)
@@ -30,11 +31,11 @@ namespace Game.Views
         private void OnEnable()
         {
             _money.text = _presentation.Money;
-            _presentation.OnUpdateMoneyCount += UpdateMoneyView;
+            _presentation.OnUpdateMoneyCount.Subscribe(UpdateMoneyView).AddTo(ref _disposableBag);
         }
 
         private void UpdateMoneyView(string money) => _money.text = money;
 
-        private void OnDisable() => _presentation.OnUpdateMoneyCount -= UpdateMoneyView;
+        private void OnDisable() => _disposableBag.Dispose();
     }
 }

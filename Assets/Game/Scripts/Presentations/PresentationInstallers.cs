@@ -1,3 +1,4 @@
+using Modules.Planets;
 using UnityEngine;
 using Zenject;
 
@@ -17,9 +18,12 @@ namespace Game.Presenters
             this.Container.BindInterfacesAndSelfTo<MoneyPresentation>()
                 .AsSingle();
             
-            this.Container.BindInterfacesAndSelfTo<PlanetPresentationCatalog>()
+            this.Container.BindInterfacesAndSelfTo<PresentationCollection>()
                 .AsSingle()
                 .NonLazy();
+
+
+            this.Container.BindFactory<Planet, PlanetPresentation, PlanetPresentation.Factory>();
         }
     }
 }

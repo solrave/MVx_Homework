@@ -8,7 +8,9 @@ namespace Game.Presenters
 {
     public class PlanetPresentation : IInitializable, IDisposable
     {
-        public event Action OnIncomeAnimation;
+        public class Factory : PlaceholderFactory<Planet, PlanetPresentation>{}
+        
+        public ReactiveCommand<Unit> OnIncomeAnimation  = new ReactiveCommand<Unit>();
 
         public string Name => _planet.Name;
         public ReadOnlyReactiveProperty<Sprite> Icon => _icon;
@@ -63,7 +65,7 @@ namespace Game.Presenters
             
             if (_planet.IsUnlocked && _planet.IsIncomeReady && !_animated)
             {
-                this.OnIncomeAnimation?.Invoke();
+                this.OnIncomeAnimation?.Execute(Unit.Default);
                 _animated = true;
             }
         }

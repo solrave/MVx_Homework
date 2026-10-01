@@ -25,7 +25,7 @@ namespace Game.Views
                 .AsSingle()
                 .NonLazy();
             
-            this.Container.BindInterfacesAndSelfTo<PlanetViewCatalog>()
+            this.Container.BindInterfacesAndSelfTo<ViewCollection>()
                 .AsSingle()
                 .NonLazy();
         }

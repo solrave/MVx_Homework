@@ -8,7 +8,10 @@ using Game.Views;
 using R3;
 
 public class PlanetView : MonoBehaviour
-{ 
+{
+    public string Id => _id;
+    
+    [SerializeField] private string _id;
     [SerializeField] private Image _coin;
     [SerializeField] private GameObject _progressGroup;
     [SerializeField] private GameObject _priceGroup;
@@ -34,11 +37,11 @@ public class PlanetView : MonoBehaviour
 
     public void Initialize(PlanetPresentation presentation)
     {
-        _presentation = presentation;
+        _presentation = presentation; 
         _button.OnHold += _presentation.PlanetHold;
         _button.OnClick += _presentation.PlanetClicked;
         
-        _presentation.OnIncomeAnimation += this.AnimateIncome;
+        _presentation.OnIncomeAnimation.Subscribe(this.AnimateIncome).AddTo(ref _disposableBag);
         
         _presentation.Price.Subscribe(SetPriceText).AddTo(ref _disposableBag);
         _presentation.Icon.Subscribe(SetIcon).AddTo(ref _disposableBag);
@@ -51,11 +54,10 @@ public class PlanetView : MonoBehaviour
     {
         if (_presentation == null) return;
         
-        _presentation.OnIncomeAnimation -= this.AnimateIncome;
         _disposableBag.Dispose();
     }
 
-    private void AnimateIncome()
+    private void AnimateIncome(Unit _)
     {
         HideCoin();
         _coinAnimator.Emit(_coin.rectTransform.position, 

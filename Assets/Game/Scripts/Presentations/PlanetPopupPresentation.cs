@@ -33,7 +33,8 @@ namespace Game.Presenters
         public void Show(IPlanet planet)
         {
             _planet = planet;
-            _planet.OnUpgraded += OnUpgraded;
+            _planet.OnUpgraded += this.OnUpgraded;
+            _planet.OnPopulationChanged += this.PopulationChanged;
             _icon.Value = _planet.GetIcon(_planet.IsUnlocked);
             _name.Value = _planet.Name;
             _population.Value = $"Population: {_planet.Population}";
@@ -54,10 +55,16 @@ namespace Game.Presenters
             _isMaxLevel.Value = _planet.IsMaxLevel;
             _canUpgrade.Value = _planet.CanUnlockOrUpgrade;
         }
+        
+        private void PopulationChanged(int count)
+        {
+            _population.Value = $"Population: {count}";
+        }
 
         private void Hide()
         {
-            _planet.OnUpgraded -= OnUpgraded;
+            _planet.OnUpgraded -= this.OnUpgraded;
+            _planet.OnPopulationChanged -= this.PopulationChanged;
             _isVisible.Value = false;
             _planet = null;
         }

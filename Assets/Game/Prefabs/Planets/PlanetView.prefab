@@ -498,13 +498,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 463749f53ed14f24baee64c682fe6cd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Views::PlanetView
-  _planetConfig: {fileID: 11400000, guid: 15e65e6f39d251d4ba9636b335fd7ff7, type: 2}
+  _id: Planet #1
   _coin: {fileID: 648301223005266422}
-  _progressGroup: {fileID: 1454737383985074918}
+  _progressGroup: {fileID: 5564512366540979095}
   _priceGroup: {fileID: 6850814019076832775}
   _progressTime: {fileID: 8019802931863089282}
   _progressBar: {fileID: 6948507870913343312}
-  _priceText: {fileID: 0}
+  _priceText: {fileID: 5444377921757551026}
   _planetIcon: {fileID: 606508972301849034}
   _planetLock: {fileID: 991180089803824017}
   _button: {fileID: 5583372068559771244}
